@@ -54,6 +54,46 @@ document.addEventListener("DOMContentLoaded", () => {
     go(0); start();
   }
 
+  // partners marquee — logo dosyası varsa göster, yoksa yazıya düş
+  // Logo eklemek için: assets/partners/<slug>.png (veya .svg) koyup PARTNERS'taki logo alanını güncelle
+  const PARTNERS = [
+    { name: "Adoçim", slug: "adocim" },
+    { name: "Traçim", slug: "tracim" },
+    { name: "Sim Standart", slug: "sim-standart" },
+    { name: "Onduline", slug: "onduline" },
+    { name: "STT", sub: "Türk Gazbeton", slug: "stt" },
+    { name: "Derya", sub: "Tuğla", slug: "derya" },
+    { name: "Beşer", sub: "Toprak San.", slug: "beser" },
+    { name: "Efor Tuğla", slug: "efor" },
+    { name: "ABS Alçı", slug: "abs" },
+    { name: "Kalekim", slug: "kalekim" },
+    { name: "ALL Alçı", slug: "all-alci" },
+    { name: "Dalsan", slug: "dalsan" },
+    { name: "Filli Boya", slug: "filli-boya" },
+    { name: "Dalmaçyalı", slug: "dalmacyali" },
+    { name: "Lion", sub: "Yalıtım", slug: "lion" },
+    { name: "Fawori", slug: "fawori" },
+  ];
+  const track = document.getElementById("partners-track");
+  if (track) {
+    const makeItem = (p) => {
+      const el = document.createElement("div");
+      el.className = "mlogo";
+      const img = document.createElement("img");
+      img.src = `assets/partners/${p.slug}.png`;
+      img.alt = p.name;
+      img.loading = "lazy";
+      const span = document.createElement("span");
+      span.style.display = "none";
+      span.innerHTML = p.name + (p.sub ? `<small>${p.sub}</small>` : "");
+      img.addEventListener("error", () => { img.style.display = "none"; span.style.display = "flex"; span.style.flexDirection = "column"; });
+      el.append(img, span);
+      return el;
+    };
+    // kesintisiz döngü için iki kopya
+    [...PARTNERS, ...PARTNERS].forEach((p) => track.appendChild(makeItem(p)));
+  }
+
   // scroll reveal
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });

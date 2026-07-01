@@ -1,0 +1,13 @@
+Çözüm ortağı logolarını buraya koyun (şeffaf PNG önerilir).
+Dosya adları TAM olarak şöyle olmalı (küçük harf):
+
+  adocim.png        traci m -> tracim.png     sim-standart.png
+  onduline.png      stt.png                   derya.png
+  beser.png         efor.png                  abs.png
+  kalekim.png       all-alci.png              dalsan.png
+  filli-boya.png    dalmacyali.png            lion.png
+  fawori.png
+
+- Logo dosyası varsa otomatik gösterilir; yoksa marka adı yazı olarak görünür.
+- .svg de kullanabilirsiniz: js/main.js içinde ".png" -> ".svg" yapın.
+- Önerilen yükseklik ~120px, şeffaf zemin.
