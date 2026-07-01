@@ -1,13 +1,9 @@
-Çözüm ortağı logolarını buraya koyun (şeffaf PNG önerilir).
-Dosya adları TAM olarak şöyle olmalı (küçük harf):
-
-  adocim.png        traci m -> tracim.png     sim-standart.png
-  onduline.png      stt.png                   derya.png
-  beser.png         efor.png                  abs.png
-  kalekim.png       all-alci.png              dalsan.png
-  filli-boya.png    dalmacyali.png            lion.png
-  fawori.png
-
-- Logo dosyası varsa otomatik gösterilir; yoksa marka adı yazı olarak görünür.
-- .svg de kullanabilirsiniz: js/main.js içinde ".png" -> ".svg" yapın.
-- Önerilen yükseklik ~120px, şeffaf zemin.
+Çözüm ortağı logoları — çoğu markanın GERÇEK logosu indirildi (net/HD).
+Şu an YAZI olarak görünen 5 marka için gerçek logo eklemek istersen,
+şeffaf PNG'yi bu klasöre şu adlarla koy + js/main.js'te ilgili "file" alanını gir:
+  abs.png            (ABS Alçı)
+  sim-standart.png   (Sim Standart)
+  stt.png            (STT Türk Gazbeton)
+  dalmacyali.png     (Dalmaçyalı)
+  lion.png           (Lion Yalıtım)
+Diğer 11 logo hazır (adocim/tracim/onduline/derya/beser/efor/kalekim/all-alci/dalsan/filli-boya/fawori).
