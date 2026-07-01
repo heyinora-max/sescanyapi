@@ -377,22 +377,27 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1
 @media (prefers-reduced-motion: reduce){ .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } .marquee__track { animation: none !important; } }
 
 /* =========================================================
-   PARTNERS — kayan logo şeridi (marquee)
+   PARTNERS — koyu zeminli kayan logo şeridi (marquee)
    ========================================================= */
-.marquee { position: relative; overflow: hidden; padding-block: 8px;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
-.marquee__track { display: flex; align-items: center; gap: 26px; width: max-content; animation: marquee 46s linear infinite; }
+.partners-band { background: #0C0C0E; color: #fff; padding-block: 40px; overflow: hidden; }
+.partners-band__cap {
+  text-align: center; font: 700 13px/1 var(--font-body); letter-spacing: .22em; text-transform: uppercase;
+  color: #C7A24A; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 16px;
+}
+.partners-band__cap::before, .partners-band__cap::after { content: ""; width: 42px; height: 1px; background: linear-gradient(90deg, transparent, #C7A24A); }
+.partners-band__cap::after { background: linear-gradient(90deg, #C7A24A, transparent); }
+.marquee { position: relative; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.marquee__track { display: flex; align-items: center; gap: 20px; width: max-content; animation: marquee 44s linear infinite; }
 .marquee:hover .marquee__track { animation-play-state: paused; }
 .mlogo {
-  flex: none; height: 92px; min-width: 176px; padding: 0 20px;
+  flex: none; height: 88px; padding: 0 10px;
   display: flex; align-items: center; justify-content: center;
-  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
 }
-.mlogo img { max-height: 52px; max-width: 140px; width: auto; object-fit: contain;
-  filter: grayscale(1); opacity: .78; transition: filter .25s, opacity .25s; }
-.mlogo:hover img { filter: none; opacity: 1; }
-.mlogo span { font: 800 19px/1.05 var(--font-head); color: var(--ink-2); text-align: center; letter-spacing: -.01em; }
-.mlogo span small { display: block; font: 600 9.5px/1 var(--font-body); letter-spacing: .1em; color: var(--muted-2); margin-top: 5px; text-transform: uppercase; }
+.mlogo img { height: 88px; width: auto; object-fit: contain; transition: transform .25s; }
+.mlogo:hover img { transform: scale(1.05); }
+.mlogo span { font: 800 20px/1.05 var(--font-head); color: #fff; text-align: center; letter-spacing: -.01em; padding: 0 24px; }
+.mlogo span small { display: block; font: 600 9.5px/1 var(--font-body); letter-spacing: .1em; color: #9AA1AC; margin-top: 5px; text-transform: uppercase; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (max-width: 640px){ .mlogo { height: 78px; min-width: 140px; } .mlogo img { max-height: 42px; max-width: 110px; } }
+@media (max-width: 640px){ .mlogo { height: 64px; } .mlogo img { height: 64px; } }
