@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     a.target = "_blank";
     a.rel = "noopener";
     a.href = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(msg)}`;
-    a.innerHTML = `${WA_ICON} Stok & fiyat için WhatsApp'tan sorun`;
+    a.innerHTML = `${WA_ICON} Stok & detay sor`;
     wrap.appendChild(a);
     body.appendChild(wrap);
   });

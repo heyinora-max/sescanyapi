@@ -448,9 +448,12 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1
 .pcard-photo h3 { font-size: 15px; font-weight: 700; margin-bottom: 5px; color: var(--ink); }
 .pcard-photo .brand { font-size: 12px; font-weight: 700; color: var(--orange); }
 
-/* ürün kartı — WhatsApp stok/fiyat sor butonu */
-.prod__cta { margin-top: 18px; }
-.wa-ask { display: inline-flex; align-items: center; gap: 9px; padding: 11px 18px; border-radius: 8px;
-  background: #25D366; color: #fff; font-weight: 600; font-size: 14px; transition: background .18s, transform .18s, box-shadow .18s; }
-.wa-ask:hover { background: #1da851; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,211,102,.32); }
-.wa-ask svg { width: 18px; height: 18px; }
+/* ürün kartı — WhatsApp stok/detay sor (küçük, sağ alt köşe) */
+.prod__body { display: flex; flex-direction: column; }
+.prod__cta { margin-top: auto; padding-top: 16px; display: flex; justify-content: flex-end; }
+.wa-ask { display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 999px;
+  background: #fff; color: #128C4A; border: 1.5px solid #25D366; font-weight: 600; font-size: 12.5px;
+  transition: background .18s, color .18s, transform .18s; }
+.wa-ask:hover { background: #25D366; color: #fff; transform: translateY(-1px); }
+.wa-ask svg { width: 15px; height: 15px; }
+@media (max-width: 640px){ .prod__cta { justify-content: flex-start; } }
