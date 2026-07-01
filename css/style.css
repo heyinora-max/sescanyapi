@@ -144,7 +144,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1
    HERO SLIDER (full-width, edge-to-edge)
    ========================================================= */
 .hero { position: relative; }
-.slider { position: relative; height: clamp(440px, 68vh, 640px); overflow: hidden; background: var(--ink); }
+.slider { position: relative; height: clamp(440px, 68vh, 640px); overflow: hidden;
+  background: linear-gradient(120deg, #16181D 0%, #1E1A16 55%, #2A1A10 100%); }
 .slide {
   position: absolute; inset: 0; opacity: 0; transition: opacity .9s ease; z-index: 1;
   background-size: cover; background-position: center;
@@ -379,25 +380,29 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1
 /* =========================================================
    PARTNERS — koyu zeminli kayan logo şeridi (marquee)
    ========================================================= */
-.partners-band { background: #0C0C0E; color: #fff; padding-block: 40px; overflow: hidden; }
+.partners-band { background: #0C0C0E; color: #fff; padding-block: 34px; overflow: hidden; }
 .partners-band__cap {
-  text-align: center; font: 700 13px/1 var(--font-body); letter-spacing: .22em; text-transform: uppercase;
-  color: #C7A24A; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 16px;
+  text-align: center; font: 700 12px/1 var(--font-body); letter-spacing: .22em; text-transform: uppercase;
+  color: #C7A24A; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; gap: 16px;
 }
 .partners-band__cap::before, .partners-band__cap::after { content: ""; width: 42px; height: 1px; background: linear-gradient(90deg, transparent, #C7A24A); }
 .partners-band__cap::after { background: linear-gradient(90deg, #C7A24A, transparent); }
 .marquee { position: relative; overflow: hidden;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
           mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
-.marquee__track { display: flex; align-items: center; gap: 20px; width: max-content; animation: marquee 44s linear infinite; }
+.marquee__track { display: flex; align-items: center; gap: 40px; width: max-content; animation: marquee 40s linear infinite; }
 .marquee:hover .marquee__track { animation-play-state: paused; }
 .mlogo {
-  flex: none; height: 88px; padding: 0 10px;
+  flex: none; height: 46px; padding: 0 4px;
   display: flex; align-items: center; justify-content: center;
 }
-.mlogo img { height: 88px; width: auto; object-fit: contain; transition: transform .25s; }
-.mlogo:hover img { transform: scale(1.05); }
-.mlogo span { font: 800 20px/1.05 var(--font-head); color: #fff; text-align: center; letter-spacing: -.01em; padding: 0 24px; }
-.mlogo span small { display: block; font: 600 9.5px/1 var(--font-body); letter-spacing: .1em; color: #9AA1AC; margin-top: 5px; text-transform: uppercase; }
+.mlogo img { height: 46px; width: auto; object-fit: contain; image-rendering: auto; opacity: .95; transition: transform .25s, opacity .25s; }
+.mlogo:hover img { transform: scale(1.06); opacity: 1; }
+.mlogo span { font: 800 17px/1.05 var(--font-head); color: #fff; text-align: center; letter-spacing: -.01em; padding: 0 20px; }
+.mlogo span small { display: block; font: 600 9px/1 var(--font-body); letter-spacing: .1em; color: #9AA1AC; margin-top: 5px; text-transform: uppercase; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (max-width: 640px){ .mlogo { height: 64px; } .mlogo img { height: 64px; } }
+@media (max-width: 640px){ .mlogo { height: 38px; } .mlogo img { height: 38px; } }
+
+/* full-width map (anasayfa alt) */
+.map-full { position: relative; }
+.map-full iframe { width: 100%; height: 440px; border: 0; display: block; filter: grayscale(.12) contrast(1.02); }
