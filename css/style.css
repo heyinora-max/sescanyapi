@@ -196,19 +196,21 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1
 /* =========================================================
    PRODUCT PHOTO TILES
    ========================================================= */
-.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-@media (max-width: 900px){ .tiles { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 560px){ .tiles { grid-template-columns: 1fr; } }
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+@media (max-width: 1080px){ .tiles { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px){ .tiles { grid-template-columns: 1fr; } }
 .tile {
-  position: relative; border-radius: var(--radius); overflow: hidden; min-height: 300px;
+  position: relative; border-radius: var(--radius); overflow: hidden; aspect-ratio: 4 / 4.3;
   display: flex; align-items: flex-end; box-shadow: var(--shadow-sm); background: var(--ink);
 }
+@media (max-width: 1080px){ .tile { aspect-ratio: 4 / 3.1; } }
+@media (max-width: 520px){ .tile { aspect-ratio: 4 / 3.4; } }
 .tile__img { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform .5s ease; }
 .tile:hover .tile__img { transform: scale(1.06); }
 .tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,17,21,0) 30%, rgba(15,17,21,.85) 100%); }
-.tile__body { position: relative; z-index: 2; padding: 26px; color: #fff; width: 100%; }
-.tile__body h3 { color: #fff; font-size: 22px; margin-bottom: 6px; }
-.tile__body p { color: #D7DBE0; font-size: 14px; margin-bottom: 14px; }
+.tile__body { position: relative; z-index: 2; padding: 22px; color: #fff; width: 100%; }
+.tile__body h3 { color: #fff; font-size: 19px; margin-bottom: 5px; line-height: 1.15; }
+.tile__body p { color: #D7DBE0; font-size: 13.5px; margin-bottom: 13px; }
 .tile__link { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; color: #fff; transition: gap .2s, color .2s; }
 .tile__link svg { width: 17px; height: 17px; color: var(--orange); transition: transform .2s; }
 .tile:hover .tile__link { color: var(--orange); }
