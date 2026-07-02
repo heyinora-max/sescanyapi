@@ -524,3 +524,11 @@ h1, h2, h3, h4 { letter-spacing: -.03em; }
   transform: scaleX(0); transform-origin: left; transition: transform .35s cubic-bezier(.2,.8,.3,1);
 }
 .card4:hover::before { transform: scaleX(1); }
+
+/* koyu bölümlerde ince derinlik ışıması */
+.footer { position: relative; overflow: hidden; }
+.footer::before { content: ""; position: absolute; top: -120px; right: -80px; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(241,90,34,.10), transparent 65%); pointer-events: none; }
+.footer .container { position: relative; z-index: 1; }
+.hero-strip { position: relative; overflow: hidden; }
+.hero-strip::before { content: ""; position: absolute; left: -60px; bottom: -140px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(241,90,34,.12), transparent 62%); pointer-events: none; }
+.hero-strip .container { position: relative; z-index: 1; }
