@@ -99,25 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
     [...PARTNERS, ...PARTNERS].forEach((p) => track.appendChild(makeItem(p)));
   }
 
-  // ürün gruplarına WhatsApp "stok & fiyat sor" butonu (urunler sayfası)
-  const WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.3A10 10 0 1 0 12 2zm5.8 14.2c-.2.7-1.4 1.3-1.9 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.3.5c-.1.2-.3.3-.1.6.1.3.6 1 1.3 1.7.9.8 1.6 1 1.9 1.2.2.1.4.1.5-.1l.6-.7c.2-.2.3-.2.6-.1l1.8.9c.2.1.4.2.5.3.1.2.1.7-.1 1.3z"/></svg>';
-  document.querySelectorAll(".prod__body").forEach((body) => {
-    const h = body.querySelector("h3");
-    if (!h) return;
-    const name = h.textContent.trim();
-    const msg = `Merhaba, *${name}* için stok durumu ve fiyat bilgisi almak istiyorum.`;
-    const wrap = document.createElement("div");
-    wrap.className = "prod__cta";
-    const a = document.createElement("a");
-    a.className = "wa-ask";
-    a.target = "_blank";
-    a.rel = "noopener";
-    a.href = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(msg)}`;
-    a.innerHTML = `${WA_ICON} Stok & detay sor`;
-    wrap.appendChild(a);
-    body.appendChild(wrap);
-  });
-
   // scroll reveal
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
