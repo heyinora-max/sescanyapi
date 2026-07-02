@@ -497,3 +497,30 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1
   .slide.active .slide__actions { animation: heroUp .8s .48s both cubic-bezier(.22,1,.36,1); }
   @keyframes heroUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
 }
+
+/* =========================================================
+   PREMIUM CİLA — tipografi + derinlik (renk/font değişmez)
+   ========================================================= */
+body { font-size: 16.5px; }
+h1, h2, h3, h4 { letter-spacing: -.03em; }
+.section-head h2 { font-size: clamp(28px, 4.3vw, 46px); line-height: 1.06; }
+.section-head p { font-size: clamp(16px, 1.9vw, 18.5px); }
+.slide__box h2 { line-height: 1.02; }
+
+/* katmanlı, yumuşak gölgeler = derinlik */
+.tile, .card4, .info-card, .prod, .form, .split__media {
+  box-shadow: 0 1px 2px rgba(20,23,28,.04), 0 10px 28px -14px rgba(20,23,28,.14);
+}
+.tile:hover, .card4:hover, .prod:hover {
+  box-shadow: 0 20px 46px -16px rgba(20,23,28,.24);
+}
+.card4__ic, .hero-strip .hstrip__ic { box-shadow: inset 0 0 0 1px rgba(241,90,34,.14); }
+
+/* kartlarda ince üst-vurgu (hover'da açılır) */
+.card4 { position: relative; overflow: hidden; }
+.card4::before {
+  content: ""; position: absolute; left: 0; top: 0; height: 3px; width: 100%;
+  background: linear-gradient(90deg, var(--orange), rgba(241,90,34,0));
+  transform: scaleX(0); transform-origin: left; transition: transform .35s cubic-bezier(.2,.8,.3,1);
+}
+.card4:hover::before { transform: scaleX(1); }
