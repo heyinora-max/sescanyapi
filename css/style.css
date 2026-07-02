@@ -33,7 +33,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; scroll-padding-top: 96px; -webkit-text-size-adjust: 100%; }
 body {
   font-family: var(--font-body);
   color: var(--ink);
@@ -301,9 +301,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1
 /* =========================================================
    PAGE HEADER (inner pages)
    ========================================================= */
-.pagehead { background: var(--ink); color: #fff; position: relative; overflow: hidden; }
-.pagehead::before { content: ""; position: absolute; inset: 0; opacity: .22; background-image: var(--x, none); background-size: cover; background-position: center; }
-.pagehead::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(15,17,21,.92), rgba(15,17,21,.7)); }
+.pagehead { background-color: var(--ink); background-size: cover; background-position: center; color: #fff; position: relative; overflow: hidden; }
+.pagehead::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(15,17,21,.93), rgba(15,17,21,.74)); }
 .pagehead .container { position: relative; z-index: 2; padding-block: clamp(50px, 7vw, 84px); }
 .pagehead h1 { font-size: clamp(30px, 5vw, 48px); color: #fff; }
 .pagehead p { margin-top: 12px; color: #B4BAC4; font-size: 17px; max-width: 620px; }
@@ -339,7 +338,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1
 .field { margin-bottom: 16px; }
 .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 7px; }
 .field label .req { color: var(--orange); }
-.field input, .field select, .field textarea { width: 100%; padding: 13px 15px; font-family: inherit; font-size: 15px; color: var(--ink); border: 1.5px solid var(--line); border-radius: var(--radius-sm); background: var(--bg-soft); transition: border-color .15s, background .15s; }
+.field input, .field select, .field textarea { width: 100%; padding: 13px 15px; font-family: inherit; font-size: 16px; color: var(--ink); border: 1.5px solid var(--line); border-radius: var(--radius-sm); background: var(--bg-soft); transition: border-color .15s, background .15s; }
 .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--orange); background: #fff; }
 .field textarea { min-height: 120px; resize: vertical; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }

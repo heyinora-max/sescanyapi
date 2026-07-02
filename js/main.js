@@ -1,6 +1,8 @@
 /* Ses Can Yapı — site interactions
    ---------------------------------------------------------
-   İLETİŞİM BİLGİLERİ TEK YERDEN: SITE objesini düzenle (yer tutucu). */
+   SITE.whatsapp: teklif formu ve wa.me link üretiminde kullanılır.
+   NOT: Telefon/e-posta/adres metinleri HTML sayfalarında yazılıdır;
+   numara değişirse HTML'lerde de arama-değiştirme yapın. */
 const SITE = {
   phone: "0549 360 11 61",
   phoneRaw: "+905493601161",
@@ -60,6 +62,15 @@ document.addEventListener("DOMContentLoaded", () => {
     prev && prev.addEventListener("click", () => { go(i - 1); reset(); });
     next && next.addEventListener("click", () => { go(i + 1); reset(); });
     go(0); start();
+    // görünmeyen slaytların görselini gecikmeli yükle (ilk yükleme hızı)
+    const lazyBgs = () => slider.querySelectorAll(".slide__bg[data-bg]").forEach((el) => {
+      el.style.backgroundImage = `url('${el.dataset.bg}')`;
+      el.removeAttribute("data-bg");
+    });
+    if (document.readyState === "complete") lazyBgs();
+    else window.addEventListener("load", lazyBgs, { once: true });
+    // sekme arka plandayken desenkron olmasın
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) { go(i); reset(); } });
   }
 
   // partners marquee — logo dosyası varsa göster, yoksa yazıya düş
@@ -93,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const img = document.createElement("img");
         img.src = `assets/partners/${p.file}`;
         img.alt = p.name;
-        img.loading = "lazy";
+        img.decoding = "async";
         span.style.display = "none";
         img.addEventListener("error", () => { img.remove(); span.style.display = "flex"; });
         el.append(img, span);
