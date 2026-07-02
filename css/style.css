@@ -448,3 +448,39 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1
 .pcard-photo h3 { font-size: 15px; font-weight: 700; margin-bottom: 5px; color: var(--ink); }
 .pcard-photo .brand { font-size: 12px; font-weight: 700; color: var(--orange); }
 
+
+/* =========================================================
+   İNCE HAREKETLER (motion) — premium his
+   ========================================================= */
+/* hero ken burns (ayrı görsel katmanı) */
+.slide__bg { position: absolute; inset: 0; background-size: cover; background-position: center; z-index: 0; transform: scale(1.06); will-change: transform; }
+.slide::before { z-index: 1; }
+.slide__inner { z-index: 3; }
+
+@media (prefers-reduced-motion: no-preference){
+  .slide.active .slide__bg { animation: kenburns 9s ease-out both; }
+  @keyframes kenburns { from { transform: scale(1.06); } to { transform: scale(1.17); } }
+
+  /* daha zarif beliriş + hafif kademeli */
+  .reveal { transform: translateY(30px); transition: opacity .75s cubic-bezier(.22,1,.36,1), transform .75s cubic-bezier(.22,1,.36,1); }
+  .tiles > .reveal:nth-child(2), .cards4 > .reveal:nth-child(2), .steps > .reveal:nth-child(2), .features > .reveal:nth-child(2) { transition-delay: .09s; }
+  .tiles > .reveal:nth-child(3), .cards4 > .reveal:nth-child(3), .steps > .reveal:nth-child(3), .features > .reveal:nth-child(3) { transition-delay: .18s; }
+  .tiles > .reveal:nth-child(4), .cards4 > .reveal:nth-child(4), .features > .reveal:nth-child(4) { transition-delay: .27s; }
+  .tiles > .reveal:nth-child(5) { transition-delay: .36s; }
+  .tiles > .reveal:nth-child(6) { transition-delay: .45s; }
+  .tiles > .reveal:nth-child(7) { transition-delay: .54s; }
+  .tiles > .reveal:nth-child(8) { transition-delay: .63s; }
+
+  /* WhatsApp nabız */
+  .wa-float::after { content: ""; position: absolute; inset: 0; border-radius: 50%; animation: wa-pulse 2.6s ease-out infinite; }
+  @keyframes wa-pulse { 0% { box-shadow: 0 0 0 0 rgba(37,211,102,.5); } 70% { box-shadow: 0 0 0 16px rgba(37,211,102,0); } 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); } }
+}
+
+/* zarif hover geçişleri */
+.btn { transition: transform .22s cubic-bezier(.2,.8,.3,1), background .2s, color .2s, box-shadow .22s, border-color .2s; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(241,90,34,.34); }
+.btn-dark:hover, .btn-outline:hover, .btn-ghost:hover { transform: translateY(-2px); }
+.wa-float { transition: transform .2s cubic-bezier(.2,.8,.3,1); }
+.wa-float svg { position: relative; z-index: 2; }
+.info-card, .partner, .step__ic { transition: transform .22s cubic-bezier(.2,.8,.3,1), box-shadow .22s, color .18s; }
+.info-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
