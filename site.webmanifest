@@ -1,0 +1,13 @@
+{
+  "name": "Ses Can Yapı Malzemeleri",
+  "short_name": "Ses Can Yapı",
+  "description": "Çerkezköy yapı malzemeleri — güvenilir tedarik, güçlü iş ortaklığı.",
+  "start_url": "./",
+  "display": "browser",
+  "background_color": "#FFFFFF",
+  "theme_color": "#F15A22",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

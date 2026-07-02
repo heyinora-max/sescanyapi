@@ -532,3 +532,49 @@ h1, h2, h3, h4 { letter-spacing: -.03em; }
 .hero-strip { position: relative; overflow: hidden; }
 .hero-strip::before { content: ""; position: absolute; left: -60px; bottom: -140px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(241,90,34,.12), transparent 62%); pointer-events: none; }
 .hero-strip .container { position: relative; z-index: 1; }
+
+/* =========================================================
+   GELİŞMİŞ KATMAN — istatistik, slider progress, to-top, SSS
+   ========================================================= */
+/* hakkımızda istatistik satırı (count-up) */
+.statrow { display: flex; gap: clamp(22px, 4vw, 44px); margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.statrow__item b { display: block; font: 800 clamp(26px, 3.4vw, 36px)/1 var(--font-head); color: var(--orange); letter-spacing: -.02em; }
+.statrow__item > span { display: block; margin-top: 6px; font-size: 13px; color: var(--muted); font-weight: 500; }
+
+/* slider zamanlama çubuğu */
+.slider__progress { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; z-index: 5; background: rgba(255,255,255,.14); }
+.slider__progress i { display: block; height: 100%; width: 0; background: var(--orange); }
+@media (prefers-reduced-motion: no-preference){
+  .slider__progress i.run { animation: slideTimer 6s linear forwards; }
+  @keyframes slideTimer { from { width: 0; } to { width: 100%; } }
+}
+
+/* sayfa kaydırma ilerleme çizgisi (header altı) */
+.scroll-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 80; pointer-events: none; }
+.scroll-progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--orange), var(--orange-dark)); transition: width .1s linear; }
+
+/* yukarı dön butonu (sol alt — WhatsApp sağda) */
+.to-top {
+  position: fixed; left: 20px; bottom: 20px; z-index: 70;
+  width: 46px; height: 46px; border-radius: 50%; background: var(--ink); color: #fff;
+  display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md);
+  opacity: 0; visibility: hidden; transform: translateY(12px);
+  transition: opacity .25s, visibility .25s, transform .25s, background .2s;
+}
+.to-top.show { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { background: var(--orange); }
+.to-top svg { width: 20px; height: 20px; }
+
+/* SSS akordiyon (iletisim) */
+.faq { max-width: 780px; margin-inline: auto; display: grid; gap: 12px; }
+.faq details { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: box-shadow .2s; }
+.faq details[open] { box-shadow: var(--shadow-sm); }
+.faq summary {
+  cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 18px 22px; font-weight: 700; font-size: 15.5px; color: var(--ink);
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font: 700 22px/1 var(--font-head); color: var(--orange); transition: transform .25s; flex: none; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq .faq__a { padding: 0 22px 20px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+.faq .faq__a a { color: var(--orange); font-weight: 600; }

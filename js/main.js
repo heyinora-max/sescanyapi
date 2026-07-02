@@ -38,11 +38,19 @@ document.addEventListener("DOMContentLoaded", () => {
   if (slider) {
     const slides = [...slider.querySelectorAll(".slide")];
     const dots = [...slider.querySelectorAll(".slider__dots button")];
+    // zamanlama çubuğu
+    const prog = document.createElement("div");
+    prog.className = "slider__progress";
+    prog.innerHTML = "<i></i>";
+    slider.appendChild(prog);
+    const bar = prog.firstElementChild;
+    const runBar = () => { bar.classList.remove("run"); void bar.offsetWidth; bar.classList.add("run"); };
     let i = 0, timer;
     const go = (n) => {
       i = (n + slides.length) % slides.length;
       slides.forEach((s, k) => s.classList.toggle("active", k === i));
       dots.forEach((d, k) => d.classList.toggle("active", k === i));
+      runBar();
     };
     const start = () => { timer = setInterval(() => go(i + 1), 6000); };
     const reset = () => { clearInterval(timer); start(); };
@@ -108,6 +116,49 @@ document.addEventListener("DOMContentLoaded", () => {
   // year
   const y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();
+
+  // sayı animasyonu (count-up)
+  const counters = document.querySelectorAll(".count[data-count]");
+  if (counters.length) {
+    const cio = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        cio.unobserve(e.target);
+        const el = e.target, target = parseInt(el.dataset.count, 10) || 0;
+        const dur = 1200, t0 = performance.now();
+        const tick = (t) => {
+          const p = Math.min(1, (t - t0) / dur);
+          el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.6 });
+    counters.forEach((el) => cio.observe(el));
+  }
+
+  // kaydırma ilerleme çizgisi + yukarı dön butonu (tüm sayfalara JS ile eklenir)
+  const sp = document.createElement("div");
+  sp.className = "scroll-progress";
+  sp.innerHTML = "<i></i>";
+  document.body.appendChild(sp);
+  const spBar = sp.firstElementChild;
+
+  const toTop = document.createElement("button");
+  toTop.className = "to-top";
+  toTop.setAttribute("aria-label", "Yukarı dön");
+  toTop.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  document.body.appendChild(toTop);
+
+  const onScrollUX = () => {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    spBar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + "%";
+    toTop.classList.toggle("show", h.scrollTop > 600);
+  };
+  onScrollUX();
+  window.addEventListener("scroll", onScrollUX, { passive: true });
 
   // contact form -> WhatsApp
   const form = document.getElementById("teklif-form");

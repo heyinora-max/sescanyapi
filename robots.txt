@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://heyinora-max.github.io/sescanyapi/sitemap.xml
