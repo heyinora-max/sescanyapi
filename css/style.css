@@ -484,3 +484,16 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1
 .wa-float svg { position: relative; z-index: 2; }
 .info-card, .partner, .step__ic { transition: transform .22s cubic-bezier(.2,.8,.3,1), box-shadow .22s, color .18s; }
 .info-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+/* slayt içeriği zarif beliriş (Ken Burns'ü tamamlar) */
+.header .nav, .header .nav__logo img { transition: height .28s cubic-bezier(.2,.8,.3,1); }
+.header.scrolled .nav { height: 64px; }
+.header.scrolled .nav__logo img { height: 40px; }
+
+@media (prefers-reduced-motion: no-preference){
+  .slide.active .slide__tag { animation: heroUp .7s .10s both cubic-bezier(.22,1,.36,1); }
+  .slide.active .slide__box h2 { animation: heroUp .8s .20s both cubic-bezier(.22,1,.36,1); }
+  .slide.active .slide__box p { animation: heroUp .8s .34s both cubic-bezier(.22,1,.36,1); }
+  .slide.active .slide__actions { animation: heroUp .8s .48s both cubic-bezier(.22,1,.36,1); }
+  @keyframes heroUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+}
