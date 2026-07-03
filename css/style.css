@@ -577,3 +577,13 @@ h1, h2, h3, h4 { letter-spacing: -.03em; }
 .faq details[open] summary::after { transform: rotate(45deg); }
 .faq .faq__a { padding: 0 22px 20px; color: var(--muted); font-size: 15px; line-height: 1.7; }
 .faq .faq__a a { color: var(--orange); font-weight: 600; }
+
+/* ürün grubu WhatsApp teklif butonu */
+.prod__cta { margin-top: 18px; }
+.btn-wa {
+  display: inline-flex; align-items: center; gap: 9px; padding: 12px 22px; border-radius: 6px;
+  background: #25D366; color: #fff; font: 700 14.5px/1 var(--font-body); white-space: nowrap;
+  transition: background .18s, transform .18s, box-shadow .18s;
+}
+.btn-wa:hover { background: #1DA851; transform: translateY(-2px); box-shadow: 0 10px 22px rgba(37,211,102,.30); }
+.btn-wa svg { width: 18px; height: 18px; }
