@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>İletişim & Teklif — Ses Can Yapı | 0549 360 11 61</title>
-<meta name="description" content="Ses Can Yapı ile iletişime geçin. Teklif formu, telefon 0549 360 11 61, WhatsApp ve adres bilgileri. Çerkezköy, Tekirdağ.">
+<title>Katalog — Ses Can Yapı | Ürün Grupları, Markalar ve Fiyatlar</title>
+<meta name="description" content="Ses Can Yapı ürün kataloğu: tuğla, çimento, gaz beton, çatı, alçı, su yalıtım, mantolama, boya ve hırdavat ürünleri. Gruba ve markaya göre filtreleyin, teklif sepetinize ekleyin.">
 <meta name="theme-color" content="#F15A22">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ses Can Yapı">
-<meta property="og:title" content="İletişim & Teklif — Ses Can Yapı">
-<meta property="og:description" content="Teklif formu, telefon ve WhatsApp — siparişinizi oluşturmadan önce mutlaka bizden teklif alın.">
+<meta property="og:title" content="Katalog — Ses Can Yapı">
+<meta property="og:description" content="Ürün gruplarına ve markalara göre filtreleyin, fiyatları görün, teklif sepetinizi oluşturun.">
 <meta property="og:image" content="https://heyinora-max.github.io/sescanyapi/assets/og-image.jpg">
-<meta property="og:url" content="https://heyinora-max.github.io/sescanyapi/iletisim.html">
-<link rel="canonical" href="https://heyinora-max.github.io/sescanyapi/iletisim.html">
+<meta property="og:url" content="https://heyinora-max.github.io/sescanyapi/katalog.html">
+<link rel="canonical" href="https://heyinora-max.github.io/sescanyapi/katalog.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
@@ -43,18 +43,17 @@
       <a class="nav__logo" href="index.html" aria-label="Ses Can Yapı ana sayfa"><img src="assets/logo.svg" alt="Ses Can Yapı"></a>
       <ul class="nav__menu">
         <li><a href="index.html">Anasayfa</a></li>
-        <li><a href="katalog.html">Katalog</a></li>
+        <li><a href="katalog.html" class="active">Katalog</a></li>
         <li><a href="urunler.html">Ürünler</a></li>
         <li><a href="index.html#partners">Çözüm Ortakları</a></li>
         <li><a href="hakkimizda.html">Hakkımızda</a></li>
-        <li><a href="iletisim.html" class="active">İletişim</a></li>
+        <li><a href="iletisim.html">İletişim</a></li>
       </ul>
       <div class="nav__cta">
         <a class="nav__phone" href="tel:+905493601161">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
           <span>Hemen Ara</span>0549 360 11 61
         </a>
-        <a class="btn btn-primary" href="#teklif">Teklif Al</a>
         <a class="nav__sepet" href="sepet.html" aria-label="Teklif sepeti">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L5 3H2"/><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/></svg>
           <span class="sayi" data-sepet-rozet hidden>0</span>
@@ -79,125 +78,80 @@
     <a class="link" href="hakkimizda.html">Hakkımızda</a>
     <a class="link" href="iletisim.html">İletişim</a>
     <a class="link drawer__sepet" href="sepet.html">Teklif Sepeti <span class="sayi" data-sepet-rozet hidden>0</span></a>
-    <a class="btn btn-primary" href="#teklif">Teklif Al</a>
+    <a class="btn btn-primary" href="iletisim.html">Teklif Al</a>
     <div class="drawer__contact"><a href="tel:+905493601161">0549 360 11 61</a><br>Çerkezköy, Tekirdağ</div>
   </div>
 </div>
 
-<section class="pagehead" style="background-image:url('assets/hero/slide3.jpg')">
+<section class="pagehead" style="background-image:url('assets/hero/slide2.jpg')">
   <div class="container">
-    <div class="crumbs"><a href="index.html">Anasayfa</a><span class="sep">/</span><span>İletişim</span></div>
-    <h1>İletişim & Teklif</h1>
-    <p>Siparişinizi oluşturmadan önce mutlaka bizden teklif alın. Aşağıdaki formu doldurun ya da doğrudan telefon/WhatsApp ile ulaşın.</p>
+    <div class="crumbs">
+      <a href="index.html">Anasayfa</a><span class="sep">/</span>
+      <span id="crumb-grup">Katalog</span>
+    </div>
+    <h1 id="baslik">Ürün Kataloğu</h1>
+    <p id="aciklama">Grubu seçin, markaya göre daraltın; ihtiyaç listenizi oluşturup tek seferde teklif isteyin.</p>
   </div>
 </section>
 
-<section class="section" id="teklif">
+<section class="section">
   <div class="container">
-    <div class="contact-grid">
+    <div class="katalog">
 
-      <div class="reveal">
-        <div class="info-card">
-          <div class="info-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></div>
-          <div><h4>Telefon</h4><a href="tel:+905493601161">0549 360 11 61</a></div>
+      <!-- ===== SOL SÜTUN ===== -->
+      <aside class="yan kapali" id="yan">
+        <div class="yan__blok">
+          <div class="yan__baslik">Ürün Grupları</div>
+          <nav class="gruplar" id="gruplar" aria-label="Ürün grupları"></nav>
         </div>
-        <div class="info-card">
-          <div class="info-card__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.3A10 10 0 1 0 12 2zm5.8 14.2c-.2.7-1.4 1.3-1.9 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.3.5c-.1.2-.3.3-.1.6.1.3.6 1 1.3 1.7.9.8 1.6 1 1.9 1.2.2.1.4.1.5-.1l.6-.7c.2-.2.3-.2.6-.1l1.8.9c.2.1.4.2.5.3.1.2.1.7-.1 1.3z"/></svg></div>
-          <div><h4>WhatsApp</h4><a href="https://wa.me/905493601161" target="_blank" rel="noopener">Hemen mesaj gönderin</a></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
-          <div><h4>E-posta</h4><a href="mailto:info@sescanyapi.com">info@sescanyapi.com</a></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-          <div><h4>Adres</h4><p>Çerkezköy, Tekirdağ</p></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
-          <div><h4>Çalışma Saatleri</h4><p>Pazartesi – Cumartesi: 08:00 – 19:00</p></div>
-        </div>
-      </div>
 
-      <form class="form reveal" id="teklif-form">
-        <h3>Teklif Talep Formu</h3>
-        <p>Bilgilerinizi girin, gönderdiğinizde WhatsApp üzerinden bize ulaşsın; en kısa sürede fiyat çalışmanızı yapalım.</p>
-        <div class="field-row">
-          <div class="field">
-            <label for="ad">Ad Soyad <span class="req">*</span></label>
-            <input type="text" id="ad" name="ad" placeholder="Adınız Soyadınız" required>
+        <div class="yan__blok">
+          <div class="yan__baslik">
+            Markalar
+            <button class="temizle" type="button" id="marka-temizle" hidden>Temizle</button>
           </div>
-          <div class="field">
-            <label for="telefon">Telefon <span class="req">*</span></label>
-            <input type="tel" id="telefon" name="telefon" placeholder="05xx xxx xx xx" required>
-          </div>
+          <div class="markalar" id="markalar"></div>
         </div>
-        <div class="field">
-          <label for="urun">İlgilendiğiniz Ürün Grubu</label>
-          <select id="urun" name="urun">
-            <option value="">Seçiniz…</option>
-            <option>Tuğla</option>
-            <option>Çimento</option>
-            <option>Gaz Beton</option>
-            <option>Çatı Malzemeleri</option>
-            <option>Alçı & Alçı Levha</option>
-            <option>Su Yalıtım Ürünleri</option>
-            <option>Mantolama Sistemleri</option>
-            <option>Diğer / Karma Liste</option>
+
+        <div class="yan__yardim">
+          <h4>Aradığınızı bulamadınız mı?</h4>
+          <p>Geniş tedarik ağımızla ihtiyaç listenizi tek noktadan karşılayalım.</p>
+          <a class="btn btn-primary" href="https://wa.me/905493601161" target="_blank" rel="noopener">WhatsApp&apos;tan Sorun</a>
+        </div>
+      </aside>
+
+      <!-- ===== SAĞ SÜTUN ===== -->
+      <main>
+        <div class="arac">
+          <button class="btn btn-outline arac__filtre" type="button" id="filtre-ac">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h18M6 12h12M10 19h4"/></svg>
+            Filtreler
+          </button>
+          <label class="arac__ara">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2"/></svg>
+            <input type="search" id="ara" placeholder="Ürün, marka ya da açıklamada ara..." autocomplete="off" aria-label="Katalogda ara">
+          </label>
+          <select id="sirala" aria-label="Sıralama">
+            <option value="yeni">Önce yeni eklenenler</option>
+            <option value="cok-satan">Önce çok satanlar</option>
+            <option value="ad">İsme göre (A-Z)</option>
+            <option value="fiyat-artan">Fiyat: düşükten yükseğe</option>
+            <option value="fiyat-azalan">Fiyat: yüksekten düşüğe</option>
           </select>
+          <span class="arac__sayi" id="sayac"></span>
         </div>
-        <div class="field">
-          <label for="mesaj">Mesajınız / İhtiyaç Listeniz</label>
-          <textarea id="mesaj" name="mesaj" placeholder="İhtiyacınız olan malzemeleri, miktarı ve teslimat yerini yazabilirsiniz."></textarea>
+
+        <div class="etiketler" id="etiketler"></div>
+
+        <div class="ukartlar" id="liste">
+          <div class="iskelet">
+            <div class="isk-kart"><i class="g"></i><i class="s"></i><i class="s s2"></i></div>
+            <div class="isk-kart"><i class="g"></i><i class="s"></i><i class="s s2"></i></div>
+            <div class="isk-kart"><i class="g"></i><i class="s"></i><i class="s s2"></i></div>
+          </div>
         </div>
-        <button type="submit" class="btn btn-primary btn-lg">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.3A10 10 0 1 0 12 2zm5.8 14.2c-.2.7-1.4 1.3-1.9 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.3.5c-.1.2-.3.3-.1.6.1.3.6 1 1.3 1.7.9.8 1.6 1 1.9 1.2.2.1.4.1.5-.1l.6-.7c.2-.2.3-.2.6-.1l1.8.9c.2.1.4.2.5.3.1.2.1.7-.1 1.3z"/></svg>
-          WhatsApp ile Gönder
-        </button>
-        <p class="form__note">Formu göndererek WhatsApp üzerinden bizimle iletişime geçmiş olursunuz.</p>
-      </form>
+      </main>
 
-    </div>
-
-    <div class="map-embed reveal">
-      <iframe title="Ses Can Yapı konum" src="https://www.google.com/maps?q=%C3%87erkezk%C3%B6y%2C+Tekirda%C4%9F&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-  </div>
-</section>
-
-<!-- ===== SSS ===== -->
-<section class="section section--soft" id="sss">
-  <div class="container">
-    <div class="section-head center reveal">
-      <span class="eyebrow">Sıkça Sorulan Sorular</span>
-      <h2>Merak <span class="u">Edilenler</span></h2>
-      <p>Aklınıza takılan başka bir soru varsa telefon ya da WhatsApp ile bize her zaman ulaşabilirsiniz.</p>
-    </div>
-    <div class="faq reveal">
-      <details>
-        <summary>Nasıl teklif alabilirim?</summary>
-        <div class="faq__a">İhtiyaç listenizi telefonla, WhatsApp üzerinden ya da bu sayfadaki teklif formuyla iletmeniz yeterli. Aynı gün içinde güncel fiyat çalışmanızı hazırlayıp size dönüş yapıyoruz.</div>
-      </details>
-      <details>
-        <summary>Hangi bölgelere teslimat yapıyorsunuz?</summary>
-        <div class="faq__a">Başta Çerkezköy olmak üzere Kapaklı, Veliköy, Karaağaç ve çevre bölgelere teslimat yapıyoruz. Farklı bölgeler ve büyük hacimli siparişler için <a href="tel:+905493601161">bizi arayın</a>, birlikte planlayalım.</div>
-      </details>
-      <details>
-        <summary>Vade ve ödeme seçenekleri nasıl?</summary>
-        <div class="faq__a">İş akışınıza uygun esnek vade seçenekleri sunuyoruz. Proje bazlı çalışmalarda ödeme planını birlikte belirliyoruz; detaylar için teklif aşamasında görüşelim.</div>
-      </details>
-      <details>
-        <summary>Minimum sipariş tutarı var mı?</summary>
-        <div class="faq__a">Hayır. İster tek palet tuğla ister komple şantiye ihtiyacı — her ölçekte siparişinizi karşılıyoruz.</div>
-      </details>
-      <details>
-        <summary>Hangi markalarla çalışıyorsunuz?</summary>
-        <div class="faq__a">Adoçim, Traçim, Onduline, Kalekim, Dalsan, Filli Boya, Fawori, STT Türk Gazbeton, Derya, Beşer, Efor başta olmak üzere 16'dan fazla güvenilir markanın çözüm ortağıyız.</div>
-      </details>
-      <details>
-        <summary>Stok durumunu nereden öğrenebilirim?</summary>
-        <div class="faq__a">En hızlı yol <a href="https://wa.me/905493601161" target="_blank" rel="noopener">WhatsApp</a> ya da telefon: 0549 360 11 61. Güçlü stok yapımızla çoğu üründe aynı gün sevkiyat sağlıyoruz.</div>
-      </details>
     </div>
   </div>
 </section>
@@ -215,14 +169,9 @@
         </div>
       </div>
       <div class="footer__col">
-        <h4>Ürünler</h4>
-        <ul>
-          <li><a href="urunler.html#tugla">Tuğla</a></li>
-          <li><a href="urunler.html#cimento">Çimento</a></li>
-          <li><a href="urunler.html#gazbeton">Gaz Beton</a></li>
-          <li><a href="urunler.html#cati">Çatı Malzemeleri</a></li>
-          <li><a href="urunler.html#alci">Alçı & Alçı Levha</a></li>
-          <li><a href="urunler.html#mantolama">Mantolama Sistemleri</a></li>
+        <h4>Katalog</h4>
+        <ul id="footer-gruplar">
+          <li><a href="katalog.html">Tüm Ürünler</a></li>
         </ul>
       </div>
       <div class="footer__col">
@@ -231,7 +180,7 @@
           <li><a href="hakkimizda.html">Hakkımızda</a></li>
           <li><a href="index.html#partners">Çözüm Ortakları</a></li>
           <li><a href="iletisim.html">İletişim</a></li>
-          <li><a href="iletisim.html">Teklif Al</a></li>
+          <li><a href="sepet.html">Teklif Sepeti</a></li>
         </ul>
       </div>
       <div class="footer__col">
@@ -259,6 +208,7 @@
 <script src="js/veri.js?v=1"></script>
 <script src="js/sepet.js?v=1"></script>
 <script src="js/kart.js?v=1"></script>
+<script src="js/katalog.js?v=1"></script>
 <script src="js/main.js?v=6"></script>
 </body>
 </html>

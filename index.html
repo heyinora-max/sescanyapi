@@ -25,6 +25,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="preload" as="image" fetchpriority="high" href="assets/hero/slide1.jpg">
 <link rel="stylesheet" href="css/style.css?v=6">
+<link rel="stylesheet" href="css/katalog.css?v=1">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="manifest" href="site.webmanifest">
@@ -77,6 +78,7 @@
       <a class="nav__logo" href="index.html" aria-label="Ses Can Yapı ana sayfa"><img src="assets/logo.svg" alt="Ses Can Yapı"></a>
       <ul class="nav__menu">
         <li><a href="index.html" class="active">Anasayfa</a></li>
+        <li><a href="katalog.html">Katalog</a></li>
         <li><a href="urunler.html">Ürünler</a></li>
         <li><a href="index.html#partners">Çözüm Ortakları</a></li>
         <li><a href="hakkimizda.html">Hakkımızda</a></li>
@@ -88,6 +90,10 @@
           <span>Hemen Ara</span>0549 360 11 61
         </a>
         <a class="btn btn-primary" href="iletisim.html">Teklif Al</a>
+        <a class="nav__sepet" href="sepet.html" aria-label="Teklif sepeti">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L5 3H2"/><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/></svg>
+          <span class="sayi" data-sepet-rozet hidden>0</span>
+        </a>
         <button class="nav__toggle" aria-label="Menüyü aç"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
       </div>
     </nav>
@@ -103,10 +109,12 @@
       <button class="drawer__close" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
     <a class="link" href="index.html">Anasayfa</a>
+    <a class="link" href="katalog.html">Katalog</a>
     <a class="link" href="urunler.html">Ürünler</a>
     <a class="link" href="index.html#partners">Çözüm Ortakları</a>
     <a class="link" href="hakkimizda.html">Hakkımızda</a>
     <a class="link" href="iletisim.html">İletişim</a>
+    <a class="link drawer__sepet" href="sepet.html">Teklif Sepeti <span class="sayi" data-sepet-rozet hidden>0</span></a>
     <a class="btn btn-primary" href="iletisim.html">Teklif Al</a>
     <div class="drawer__contact"><a href="tel:+905493601161">0549 360 11 61</a><br>Çerkezköy, Tekirdağ</div>
   </div>
@@ -174,6 +182,24 @@
 <section class="partners-band" id="partners">
   <div class="container"><p class="partners-band__cap">Çözüm Ortaklarımız</p></div>
   <div class="marquee"><div class="marquee__track" id="partners-track"></div></div>
+</section>
+
+
+<!-- ===== EN ÇOK SATANLAR (panelden yönetilir) ===== -->
+<section class="section" id="cok-satan-bolum" hidden>
+  <div class="container">
+    <div class="cokSatan__ust reveal">
+      <div class="section-head">
+        <span class="eyebrow">Katalogdan</span>
+        <h2>En Çok <span class="u">Satanlar</span></h2>
+        <p>Şantiyelerin en sık istediği ürünler; fiyatları güncel tutuyoruz.</p>
+      </div>
+      <a class="btn btn-outline" href="katalog.html">Tüm Katalog
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+    <div class="ukartlar" id="cok-satan"></div>
+  </div>
 </section>
 
 <!-- ===== PRODUCT TILES ===== -->
@@ -397,6 +423,11 @@
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.3A10 10 0 1 0 12 2zm5.8 14.2c-.2.7-1.4 1.3-1.9 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.3.5c-.1.2-.3.3-.1.6.1.3.6 1 1.3 1.7.9.8 1.6 1 1.9 1.2.2.1.4.1.5-.1l.6-.7c.2-.2.3-.2.6-.1l1.8.9c.2.1.4.2.5.3.1.2.1.7-.1 1.3z"/></svg>
 </a>
 
+<script src="js/config.js?v=1"></script>
+<script src="js/veri.js?v=1"></script>
+<script src="js/sepet.js?v=1"></script>
+<script src="js/kart.js?v=1"></script>
+<script src="js/anasayfa.js?v=1"></script>
 <script src="js/main.js?v=6"></script>
 </body>
 </html>
