@@ -192,6 +192,28 @@ h1, h2, h3, h4 { font-family: var(--p-baslik); font-weight: 800; letter-spacing:
 
 .grup__bos { padding: 26px 18px; text-align: center; color: var(--p-gri); font-size: 14px; }
 
+/* Dar ekran: başlık tek satıra sığmıyor. Sarmalanmazsa esnek kutular
+   birbirini eziyor — logo görünmez oluyor, grup adı tek harfe düşüyor. */
+@media (max-width: 760px){
+  .pbas__ic { height: auto; padding-block: 12px; flex-wrap: wrap; row-gap: 10px; }
+  .pbas__logo { flex: none; }
+  .pbas__logo img { height: 32px; }
+  .pbas__ad { font-size: 14px; }
+  .pbas__sag { width: 100%; margin-left: 0; justify-content: space-between; }
+}
+@media (max-width: 460px){
+  .pbas__ad { display: none; }   /* logo + Demo rozeti zaten yeterli */
+}
+
+@media (max-width: 700px){
+  .grup__bas { flex-wrap: wrap; row-gap: 12px; }
+  .grup__ac { flex: 1 1 100%; }
+  .grup__yazi { flex: 1; }
+  .grup__yazi h3 { white-space: normal; overflow: visible; text-overflow: clip; }
+  .grup__islem { width: 100%; }
+  .grup__islem .d { flex: 1; }
+}
+
 @media (max-width: 900px){
   .satir { grid-template-columns: 48px minmax(0,1fr) auto; row-gap: 10px; }
   .satir--bas { display: none; }
