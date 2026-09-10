@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Yonetim paneli ve kisiye ozel sepet arama sonuclarinda cikmasin
+Disallow: /panel.html
+Disallow: /sepet.html
+
 Sitemap: https://heyinora-max.github.io/sescanyapi/sitemap.xml
