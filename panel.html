@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/panel.css?v=3">
+<link rel="stylesheet" href="css/panel.css?v=4">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 </head>
 <body>
@@ -33,6 +33,12 @@
     </div>
 
     <button class="d d--ana" type="submit" id="giris-dugme">Giriş Yap</button>
+
+    <div class="giris__gecis" id="giris-gecis" hidden>
+      <span id="gecis-yazi">İlk kez mi giriyorsunuz?</span>
+      <button type="button" id="gecis-dugme">Şifrenizi oluşturun</button>
+    </div>
+
     <div class="giris__alt"><a href="index.html">&larr; Siteye dön</a></div>
   </form>
 </div>
@@ -54,6 +60,14 @@
       </div>
     </div>
   </header>
+
+  <div class="uyari-serit uyari-serit--kirmizi" id="yetki-uyari" hidden>
+    <div class="kap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+      <span><b>Bu hesabın yetkisi yok.</b> Giriş yaptınız ama ürün ekleyip değiştiremezsiniz.
+      Panele erişimi olan bir kullanıcı sizi <b>Kullanıcılar</b> listesine eklemeli.</span>
+    </div>
+  </div>
 
   <div class="uyari-serit" id="demo-uyari" hidden>
     <div class="kap">
@@ -79,6 +93,10 @@
       <button class="d d--ana" type="button" id="grup-ekle">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
         Yeni Grup
+      </button>
+      <button class="d d--cizgi" type="button" id="kullanici-ac" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>
+        Kullanıcılar
       </button>
       <button class="d d--cizgi" type="button" id="excel-ac">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>
@@ -241,6 +259,46 @@
   </form>
 </div>
 
+<!-- ===================== PANEL KULLANICILARI ===================== -->
+<div class="kip" id="kip-kullanici" hidden>
+  <div class="kip__perde" data-kapat></div>
+  <div class="kip__kutu" style="max-width:620px">
+    <div class="kip__bas">
+      <h2>Panel Kullanıcıları</h2>
+      <button class="kapat" type="button" data-kapat aria-label="Kapat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="kip__govde">
+      <p class="kip__aciklama">
+        Bu listedeki e-postalar panele girip ürün ekleyebilir. Listeye eklenen kişi
+        panel adresine gidip <b>&laquo;Şifrenizi oluşturun&raquo;</b> diyerek kendi şifresini belirler —
+        başka hiçbir yere girmesi gerekmez.
+      </p>
+
+      <form class="kullanici-ekle" id="kullanici-form">
+        <div class="alan">
+          <label for="k-eposta">E-posta <span class="zorunlu">*</span></label>
+          <input type="email" id="k-eposta" required placeholder="ornek@sescanyapi.com" autocomplete="off">
+        </div>
+        <div class="alan">
+          <label for="k-ad">Ad (isteğe bağlı)</label>
+          <input type="text" id="k-ad" placeholder="Örn: Muhasebe">
+        </div>
+        <button class="d d--ana" type="submit">Ekle</button>
+      </form>
+
+      <div class="kullanici-liste" id="kullanici-liste"></div>
+    </div>
+
+    <div class="kip__alt">
+      <button class="d d--sade" type="button" data-kapat>Kapat</button>
+      <span class="kip__durum" id="kullanici-durum"></span>
+    </div>
+  </div>
+</div>
+
 <!-- ===================== EXCEL / CSV AKTARMA ===================== -->
 <div class="kip" id="kip-excel" hidden>
   <div class="kip__perde" data-kapat></div>
@@ -337,7 +395,7 @@
 <div class="bildirimler" id="bildirimler"></div>
 
 <script src="js/config.js?v=2"></script>
-<script src="js/veri.js?v=2"></script>
-<script src="js/panel.js?v=4"></script>
+<script src="js/veri.js?v=3"></script>
+<script src="js/panel.js?v=5"></script>
 </body>
 </html>

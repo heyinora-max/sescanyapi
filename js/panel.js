@@ -21,6 +21,8 @@
     urunler: [],
     acik: new Set(),      // açık duran grup kimlikleri
     arama: "",
+    ben: { eposta: "", yonetici: true },   // oturumdaki kullanıcı ve yazma yetkisi
+    kayitKipi: false,                      // giriş ekranı: giriş mi, hesap oluşturma mı
   };
 
   /* ---------------- bildirim ---------------- */
@@ -60,31 +62,68 @@
 
   /* ---------------- giriş ---------------- */
 
+  /* Giriş ekranı iki iş görüyor: giriş ve ilk şifre oluşturma. */
+  function girisEkraniniYaz() {
+    const canli = window.Veri.CANLI;
+    const kayit = durum.kayitKipi;
+    $("#giris-alt-yazi").textContent = !canli
+      ? "Ürün ve fiyat girişi için şifrenizi girin."
+      : kayit
+        ? "Listeye eklenen e-postanızla kendi şifrenizi belirleyin."
+        : "Ürün ve fiyat girişi için e-posta ve şifrenizle giriş yapın.";
+    $("#giris-dugme").textContent = kayit ? "Hesabı Oluştur" : "Giriş Yap";
+    $("#gecis-yazi").textContent = kayit ? "Şifreniz zaten var mı?" : "İlk kez mi giriyorsunuz?";
+    $("#gecis-dugme").textContent = kayit ? "Giriş yapın" : "Şifrenizi oluşturun";
+    $("#g-sifre").setAttribute("autocomplete", kayit ? "new-password" : "current-password");
+    $("#giris-hata").hidden = true;
+  }
+
   function girisKur() {
     const canli = window.Veri.CANLI;
     $("#alan-eposta").hidden = !canli;
     $("#g-eposta").required = canli;
-    $("#giris-alt-yazi").textContent = canli
-      ? "Ürün ve fiyat girişi için e-posta ve şifrenizle giriş yapın."
-      : "Ürün ve fiyat girişi için şifrenizi girin.";
+    girisEkraniniYaz();
+
+    // Canlı yayında, listeye eklenmiş kişi şifresini kendisi belirleyebilir
+    $("#giris-gecis").hidden = !canli;
+    $("#gecis-dugme").addEventListener("click", () => {
+      durum.kayitKipi = !durum.kayitKipi;
+      girisEkraniniYaz();
+    });
 
     $("#giris-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const hata = $("#giris-hata");
       const dugme = $("#giris-dugme");
+      const eposta = $("#g-eposta").value.trim();
+      const sifre = $("#g-sifre").value;
       hata.hidden = true;
       dugme.disabled = true;
-      dugme.textContent = "Giriş yapılıyor...";
+      dugme.textContent = durum.kayitKipi ? "Hesap oluşturuluyor..." : "Giriş yapılıyor...";
       try {
-        await window.Veri.girisYap($("#g-eposta").value.trim(), $("#g-sifre").value);
-        $("#g-sifre").value = "";
+        if (durum.kayitKipi) {
+          if (sifre.length < 6) throw new Error("Şifre en az 6 karakter olmalı.");
+          const sonuc = await window.Veri.kayitOl(eposta, sifre);
+          $("#g-sifre").value = "";
+          if (!sonuc.girildi) {
+            durum.kayitKipi = false;
+            girisEkraniniYaz();
+            hata.textContent = "Hesap oluşturuldu. E-postanıza gelen doğrulama bağlantısına " +
+                               "tıkladıktan sonra buradan giriş yapabilirsiniz.";
+            hata.hidden = false;
+            return;
+          }
+        } else {
+          await window.Veri.girisYap(eposta, sifre);
+          $("#g-sifre").value = "";
+        }
         await paneliAc();
       } catch (h) {
-        hata.textContent = h.message || "Giriş yapılamadı.";
+        hata.textContent = h.message || "İşlem tamamlanamadı.";
         hata.hidden = false;
       } finally {
         dugme.disabled = false;
-        dugme.textContent = "Giriş Yap";
+        dugme.textContent = durum.kayitKipi ? "Hesabı Oluştur" : "Giriş Yap";
       }
     });
 
@@ -104,6 +143,12 @@
     rozet.className = "rozet " + (canli ? "rozet--canli" : "rozet--demo");
     $("#mod-yazi").textContent = canli ? "Canlı yayın" : "Demo modu";
     $("#demo-uyari").hidden = canli;
+
+    // Yazma yetkisi veritabanından sorulur; yetkisiz kullanıcı uyarı görür
+    try { durum.ben = await window.Veri.kimim(); }
+    catch (h) { durum.ben = { eposta: "", yonetici: !canli }; }
+    $("#yetki-uyari").hidden = !canli || durum.ben.yonetici;
+    $("#kullanici-ac").hidden = !canli || !durum.ben.yonetici;
 
     await veriTazele();
   }
@@ -522,6 +567,59 @@
     } catch (h) {
       bildir("Sıra değiştirilemedi: " + h.message, true);
     }
+  }
+
+
+  /* =========================================================
+     PANEL KULLANICILARI
+     ---------------------------------------------------------
+     Yazma yetkisi veritabanındaki yonetici listesine bağlı. Liste
+     buradan yönetilir; müşterinin Supabase arayüzüne girmesi gerekmez.
+     ========================================================= */
+
+  async function kullanicilariCiz() {
+    const kap = $("#kullanici-liste");
+    kap.innerHTML = '<div class="kullanici-bos">Yükleniyor...</div>';
+    try {
+      const liste = await window.Veri.yoneticiler();
+      if (!liste.length) {
+        kap.innerHTML = '<div class="kullanici-bos">Listede kimse yok.</div>';
+        return;
+      }
+      kap.innerHTML = liste.map((y) => {
+        const ben = y.eposta.toLowerCase() === (durum.ben.eposta || "").toLowerCase();
+        return (
+          '<div class="kullanici-satir">' +
+            '<div class="kullanici-satir__ad">' +
+              "<b>" + kacis(y.eposta) + "</b>" +
+              (y.ad ? "<span>" + kacis(y.ad) + "</span>" : "") +
+            "</div>" +
+            (ben ? '<span class="rozet-ben">Siz</span>' : "") +
+            (ben ? "" :
+              '<button class="mini sil" type="button" data-kullanici-sil="' + kacis(y.eposta) + '" ' +
+                      'title="Listeden çıkar" aria-label="Listeden çıkar">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>' +
+              "</button>") +
+          "</div>"
+        );
+      }).join("");
+    } catch (h) {
+      kap.innerHTML = '<div class="kullanici-bos">Liste okunamadı: ' + kacis(h.message) + "</div>";
+    }
+  }
+
+  function kullaniciKipiAc() {
+    $("#k-eposta").value = "";
+    $("#k-ad").value = "";
+    $("#kullanici-durum").textContent = "";
+    $("#kip-kullanici").hidden = false;
+    document.body.style.overflow = "hidden";
+    kullanicilariCiz();
+  }
+
+  function kullaniciKipiKapat() {
+    $("#kip-kullanici").hidden = true;
+    document.body.style.overflow = "";
   }
 
   /* =========================================================
@@ -1009,6 +1107,38 @@
 
     $("#grup-ekle").addEventListener("click", () => grupKipiAc(null));
 
+    // --- panel kullanıcıları ---
+    $("#kullanici-ac").addEventListener("click", kullaniciKipiAc);
+
+    $("#kullanici-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const eposta = $("#k-eposta").value.trim();
+      if (!eposta) return;
+      $("#kullanici-durum").textContent = "Ekleniyor...";
+      try {
+        await window.Veri.yoneticiEkle(eposta, $("#k-ad").value.trim());
+        $("#k-eposta").value = ""; $("#k-ad").value = "";
+        await kullanicilariCiz();
+        bildir(eposta + " listeye eklendi. Panelden kendi şifresini oluşturabilir.");
+      } catch (h) {
+        bildir("Eklenemedi: " + h.message, true);
+      } finally {
+        $("#kullanici-durum").textContent = "";
+      }
+    });
+
+    $("#kullanici-liste").addEventListener("click", async (e) => {
+      const d = e.target.closest("[data-kullanici-sil]");
+      if (!d) return;
+      const eposta = d.getAttribute("data-kullanici-sil");
+      if (!confirm(eposta + " listeden çıkarılsın mı? Bu kişi artık ürün ekleyip değiştiremez.")) return;
+      try {
+        await window.Veri.yoneticiSil(eposta);
+        await kullanicilariCiz();
+        bildir(eposta + " listeden çıkarıldı.");
+      } catch (h) { bildir("Çıkarılamadı: " + h.message, true); }
+    });
+
     // --- Excel / CSV aktarma ---
     $("#excel-ac").addEventListener("click", excelKipiAc);
     $("#sablon-indir").addEventListener("click", () => {
@@ -1097,7 +1227,7 @@
     // kip kapatma: perde, çarpı, Vazgeç ve Esc
     document.querySelectorAll("[data-kapat]").forEach((d) =>
       d.addEventListener("click", () => {
-        urunKipiKapat(); grupKipiKapat(); excelKipiKapat(); topluFiyatKapat();
+        urunKipiKapat(); grupKipiKapat(); excelKipiKapat(); topluFiyatKapat(); kullaniciKipiKapat();
       })
     );
     document.addEventListener("keydown", (e) => {
@@ -1106,6 +1236,7 @@
       if (!$("#kip-grup").hidden) grupKipiKapat();
       if (!$("#kip-excel").hidden) excelKipiKapat();
       if (!$("#kip-fiyat").hidden) topluFiyatKapat();
+      if (!$("#kip-kullanici").hidden) kullaniciKipiKapat();
     });
 
     gorselOlaylari();

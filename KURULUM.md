@@ -18,6 +18,31 @@ tarayıcı kendiliğinden açılır.
 **Demo şifresi:** `sescan2026`
 (Canlıya alındıktan sonra bunun yerine size verilen e-posta ve şifre kullanılır.)
 
+### Panele giriş ve kullanıcı ekleme
+
+Panele giren kişi listeyle belirlenir. **Başka hiçbir siteye girmeniz gerekmez** —
+her şey panelin kendi içinden yapılır.
+
+**İlk şifrenizi oluşturmak**
+
+1. Panel adresine gidin.
+2. Giriş kutusunun altındaki **«Şifrenizi oluşturun»** bağlantısına tıklayın.
+3. Listede olan e-postanızı ve kendi belirlediğiniz şifreyi yazın.
+4. **Hesabı Oluştur** deyin. Şifreniz artık sizindir; kimse göremez.
+
+**Panele başka birini eklemek** (muhasebe, depo sorumlusu…)
+
+1. Üstteki **Kullanıcılar** düğmesine basın.
+2. Kişinin e-postasını yazıp **Ekle** deyin.
+3. O kişi panel adresine gidip yukarıdaki gibi kendi şifresini oluşturur.
+
+**Birini çıkarmak:** Kullanıcılar listesinde adının yanındaki çöp kutusu. O kişi
+artık ürün ekleyip değiştiremez.
+
+> **Neden liste var?** Ürün ekleme yetkisi hesap açmış olmakla değil, bu listede
+> olmakla veriliyor. Biri sitede kendine hesap açsa bile listede yoksa hiçbir
+> şeyi değiştiremez — kataloğunuz güvende kalır.
+
 ### Ürün eklemek
 
 1. Panelde ürün grupları alt alta listelidir: *Boya Malzemeleri Ürünleri*, *Çimento Ürünleri*...
@@ -110,6 +135,8 @@ istediğiniz ürünler için kullanışlıdır.
 | Benzer ürün eklemek | Ürün satırındaki kopyala simgesi |
 | Gruba toplu zam yapmak | Grup satırındaki **%** simgesi |
 | Grup sırasını değiştirmek | Grup satırındaki yukarı/aşağı okları |
+| Panele kullanıcı eklemek / çıkarmak | Üstteki **Kullanıcılar** düğmesi |
+| Kendi şifrenizi oluşturmak | Giriş ekranında **«Şifrenizi oluşturun»** |
 | Yedek almak | **Yedek İndir** — bilgisayarınıza JSON dosyası iner |
 
 ---
@@ -170,6 +197,11 @@ Canlıya geçmeden önce demo modda ürün girdiyseniz kaybolmasınlar diye:
 - Tüm veri okuma/yazma `js/veri.js` üzerinden geçer. Supabase bağlı değilse aynı arayüz
   `localStorage`'a yazar; bu yüzden sayfalarda hiçbir değişiklik gerekmeden canlıya geçilir.
 - `js/config.js` tek ayar dosyasıdır: Supabase bilgileri, WhatsApp numarası, para birimi, KDV notu.
+- Güvenlik: yazma yetkisi `public.yoneticiler` tablosundaki e-posta listesine
+  bağlıdır (`sql/02-yonetici-listesi.sql`). Hesabı olmak tek başına yetki vermez;
+  politikalar her yazmada `public.yonetici_mi()` fonksiyonunu sorar.
+- Alan adı değiştirmek: `python araclar/alan-adi.py sescanyapi.com` — sitedeki
+  bütün mutlak adresleri ve CNAME dosyasını tek seferde günceller.
 - Güvenlik: `anon` anahtarıyla **yazma kapalıdır**. Ürün yazma/silme yalnızca Supabase
   kullanıcısı olarak giriş yapılınca mümkündür (RLS politikaları `sql/supabase-kurulum.sql` içinde).
 - Görseller yüklenmeden önce tarayıcıda en uzun kenarı 1000px olacak şekilde küçültülüp

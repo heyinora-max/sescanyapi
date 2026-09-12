@@ -346,3 +346,43 @@ h1, h2, h3, h4 { font-family: var(--p-baslik); font-weight: 800; letter-spacing:
 .onizleme__devam { padding: 8px 10px; font-size: 12.5px; color: var(--p-gri); }
 
 .mini[disabled] { opacity: .28; cursor: default; pointer-events: none; }
+
+/* =========================================================
+   PANEL KULLANICILARI
+   ========================================================= */
+.uyari-serit--kirmizi { background: #FEF2F2; border-bottom-color: #FBD5D5; color: #991B1B; }
+.uyari-serit--kirmizi svg { color: #C22F2F; }
+
+.giris__gecis {
+  margin-top: 14px; text-align: center; font-size: 13.5px; color: var(--p-gri);
+  display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;
+}
+.giris__gecis button {
+  border: 0; background: transparent; padding: 0; cursor: pointer;
+  color: var(--p-turuncu); font: 600 13.5px/1.4 var(--p-yazi);
+}
+.giris__gecis button:hover { text-decoration: underline; }
+
+.kullanici-ekle {
+  display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end;
+  padding-bottom: 18px; border-bottom: 1px solid var(--p-cizgi);
+}
+.kullanici-ekle .alan { margin: 0; }
+
+.kullanici-liste { margin-top: 16px; display: grid; gap: 8px; }
+.kullanici-satir {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border: 1px solid var(--p-cizgi); border-radius: 10px; background: #fff;
+}
+.kullanici-satir__ad { flex: 1 1 auto; min-width: 0; }
+.kullanici-satir__ad b { display: block; font-size: 14.5px; color: var(--p-ink); }
+.kullanici-satir__ad span { display: block; font-size: 12.5px; color: var(--p-gri); }
+.kullanici-satir .rozet-ben {
+  font: 700 11px/1 var(--p-yazi); color: var(--p-yesil);
+  background: #EAF6EF; border: 1px solid #CBE5D4; padding: 5px 8px; border-radius: 999px;
+}
+.kullanici-bos { padding: 18px; text-align: center; color: var(--p-gri); font-size: 13.5px; }
+
+@media (max-width: 600px) {
+  .kullanici-ekle { grid-template-columns: 1fr; }
+}

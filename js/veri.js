@@ -187,6 +187,14 @@
       sessionStorage.setItem(ANAHTAR.oturum, "1");
       return true;
     },
+
+    /* Demo modda kullanıcı yönetimi yok: tek şifre var. Panelin aynı
+       kodu çalıştırabilmesi için arayüz yine de karşılanıyor. */
+    async kimim() { return { eposta: "", yonetici: true }; },
+    async yoneticiler() { return []; },
+    async yoneticiEkle() { throw new Error("Kullanıcı yönetimi yalnızca canlı yayında çalışır."); },
+    async yoneticiSil()  { throw new Error("Kullanıcı yönetimi yalnızca canlı yayında çalışır."); },
+    async kayitOl()      { throw new Error("Hesap oluşturma yalnızca canlı yayında çalışır."); },
     cikisYap() { sessionStorage.removeItem(ANAHTAR.oturum); },
     oturumVar() { return sessionStorage.getItem(ANAHTAR.oturum) === "1"; },
   };
@@ -312,6 +320,75 @@
         throw new Error("Görsel yüklenemedi: " + m);
       }
       return this._kok + "/storage/v1/object/public/" + kova + "/" + ad;
+    },
+
+    /* Oturumdaki kullanıcının e-postası — jetonun içinden okunur.
+       Ek bir istek gerekmiyor. */
+    _oturumEpostasi() {
+      const j = this._jeton();
+      if (!j || !j.access_token) return "";
+      try {
+        const govde = j.access_token.split(".")[1];
+        const d = JSON.parse(decodeURIComponent(escape(atob(govde.replace(/-/g, "+").replace(/_/g, "/")))));
+        return d.email || "";
+      } catch (e) { return (j.user && j.user.email) || ""; }
+    },
+
+    /* Yazma yetkisi veritabanındaki yonetici_mi() fonksiyonundan sorulur;
+       tarayıcıdaki hiçbir bilgiye güvenilmiyor. */
+    async kimim() {
+      const eposta = this._oturumEpostasi();
+      if (!eposta) return { eposta: "", yonetici: false };
+      try {
+        const y = await fetch(this._kok + "/rest/v1/rpc/yonetici_mi", {
+          method: "POST",
+          headers: { ...this._baslik(), "Content-Type": "application/json" },
+          body: "{}",
+        });
+        const yetki = y.ok ? await y.json() : false;
+        return { eposta: eposta, yonetici: yetki === true };
+      } catch (e) {
+        return { eposta: eposta, yonetici: false };
+      }
+    },
+
+    async yoneticiler() {
+      const s = await this._rest("/yoneticiler?select=*&order=olusturma.asc", { headers: this._baslik() });
+      return s.map((y) => ({ eposta: y.eposta, ad: y.ad || "", ekleyen: y.ekleyen || "", olusturma: y.olusturma }));
+    },
+
+    async yoneticiEkle(eposta, ad) {
+      return this._rest("/yoneticiler", {
+        method: "POST",
+        headers: this._baslik(true),
+        body: JSON.stringify({ eposta: String(eposta).trim().toLowerCase(), ad: ad || "",
+                               ekleyen: this._oturumEpostasi() }),
+      });
+    },
+
+    async yoneticiSil(eposta) {
+      await this._rest("/yoneticiler?eposta=eq." + encodeURIComponent(String(eposta).toLowerCase()),
+        { method: "DELETE", headers: this._baslik(true) });
+      return true;
+    },
+
+    /* Listeye eklenmiş kişi kendi şifresini panelden belirler; Supabase
+       arayüzüne girmeye gerek kalmıyor. Yetki yine listeye bağlı. */
+    async kayitOl(eposta, sifre) {
+      const y = await fetch(this._kok + "/auth/v1/signup", {
+        method: "POST",
+        headers: { apikey: A.supabaseAnonKey, "Content-Type": "application/json" },
+        body: JSON.stringify({ email: eposta, password: sifre }),
+      });
+      const j = await y.json().catch(() => ({}));
+      if (!y.ok) throw new Error(j.error_description || j.msg || j.message || "Hesap oluşturulamadı.");
+      if (j.access_token) {
+        if (j.expires_in && !j.expires_at) j.expires_at = Math.floor(Date.now() / 1000) + j.expires_in;
+        localStorage.setItem(ANAHTAR.jeton, JSON.stringify(j));
+        return { girildi: true };
+      }
+      // Oturum dönmediyse e-posta doğrulaması bekleniyor demektir
+      return { girildi: false };
     },
 
     async girisYap(eposta, sifre) {
@@ -452,6 +529,13 @@
     girisYap: (k, s) => K.girisYap(k, s),
     cikisYap: () => K.cikisYap(),
     oturumVar: () => K.oturumVar(),
+
+    /* --- panel kullanıcıları --- */
+    kimim: () => K.kimim(),
+    yoneticiler: () => K.yoneticiler(),
+    yoneticiEkle: (e, a) => K.yoneticiEkle(e, a),
+    yoneticiSil: (e) => K.yoneticiSil(e),
+    kayitOl: (e, s) => K.kayitOl(e, s),
 
     /* --- yedek --- */
     async yedekAl() {
