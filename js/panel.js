@@ -51,6 +51,13 @@
       .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
 
+  /* "Boya Malzemeleri" -> "Boya Malzemeleri Ürünleri", ama adı zaten
+     "... Ürünleri" ile biten gruplarda ikinci kez eklemez. */
+  function grupBasligi(ad) {
+    const t = String(ad || "").trim();
+    return /ürünler[i]?$/i.test(t) ? t : t + " Ürünleri";
+  }
+
   /* ---------------- giriş ---------------- */
 
   function girisKur() {
@@ -205,7 +212,7 @@
             '<span class="grup__ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg></span>' +
             gorsel +
             '<span class="grup__yazi">' +
-              "<h3>" + kacis(g.ad) + " Ürünleri</h3>" +
+              "<h3>" + kacis(grupBasligi(g.ad)) + "</h3>" +
               "<span>" + toplam + " ürün" + (durum.arama && urunler.length !== toplam ? " · aramada " + urunler.length : "") + "</span>" +
             "</span>" +
           "</button>" +

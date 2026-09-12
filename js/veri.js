@@ -69,12 +69,13 @@
     { slug:"alci",        ad:"Alçı & Alçı Levha",      aciklama:"Saten, kartonpiyer, alçı levha ve profil sistemleri.",     gorsel:"assets/products/cat-alci.jpg" },
     { slug:"su-yalitim",  ad:"Su Yalıtım",             aciklama:"Membran, likit yalıtım ve su izolasyon ürünleri.",         gorsel:"assets/products/cat-suyalitim.jpg" },
     { slug:"mantolama",   ad:"Mantolama Sistemleri",   aciklama:"EPS/XPS levha, yapıştırıcı, sıva ve dış cephe boyası.",    gorsel:"assets/products/cat-mantolama.jpg" },
-    { slug:"boya",        ad:"Boya Malzemeleri",       aciklama:"İç cephe, dış cephe boyaları, astar, fırça ve rulo.",      gorsel:"" },
-    { slug:"insaat",      ad:"İnşaat Malzemeleri",     aciklama:"Demir, kum, çakıl, kalıp ve genel şantiye malzemeleri.",   gorsel:"" },
-    { slug:"hirdavat",    ad:"Hırdavat & El Aletleri", aciklama:"El aletleri, vida, dübel, kesici ve bağlantı elemanları.", gorsel:"" },
-    { slug:"yapi-kimya",  ad:"Yapı Kimyasalları",      aciklama:"Yapıştırıcı, derz dolgu, kür ve katkı malzemeleri.",       gorsel:"" },
-    { slug:"tesisat",     ad:"Tesisat Ürünleri",       aciklama:"PPRC, PVC boru, ek parça ve tesisat armatürleri.",         gorsel:"" },
-    { slug:"is-guvenlik", ad:"İş Güvenliği Ürünleri",  aciklama:"Baret, eldiven, gözlük ve şantiye güvenlik ürünleri.",     gorsel:"" },
+    { slug:"boya",        ad:"Boya Malzemeleri",       aciklama:"İç cephe, dış cephe boyaları, astar, fırça ve rulo.",      gorsel:"assets/products/cat-boya.jpg" },
+    { slug:"insaat",      ad:"İnşaat Malzemeleri",     aciklama:"Demir, kum, çakıl, kalıp ve genel şantiye malzemeleri.",   gorsel:"assets/products/cat-insaat.jpg" },
+    { slug:"hirdavat",    ad:"Hırdavat & El Aletleri", aciklama:"El aletleri, vida, dübel, kesici ve bağlantı elemanları.", gorsel:"assets/products/cat-hirdavat.jpg" },
+    { slug:"yapi-kimya",  ad:"Yapı Kimyasalları",      aciklama:"Yapıştırıcı, derz dolgu, kür ve katkı malzemeleri.",       gorsel:"assets/products/cat-yapikimya.jpg" },
+    { slug:"tesisat",     ad:"Tesisat Ürünleri",       aciklama:"PPRC, PVC boru, ek parça ve tesisat armatürleri.",         gorsel:"assets/products/cat-tesisat.jpg" },
+    { slug:"is-guvenlik", ad:"İş Güvenliği Ürünleri",  aciklama:"Baret, eldiven, gözlük ve şantiye güvenlik ürünleri.",     gorsel:"assets/products/cat-isguvenlik.jpg" },
+    { slug:"elektrik",    ad:"Elektrik Malzemeleri",   aciklama:"Kablo, spiral boru, priz, anahtar, sigorta ve pano malzemeleri.", gorsel:"assets/products/cat-elektrik.jpg" },
   ];
 
   /* =========================================================

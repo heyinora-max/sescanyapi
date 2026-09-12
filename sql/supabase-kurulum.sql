@@ -94,12 +94,13 @@ insert into public.gruplar (slug, ad, aciklama, gorsel, sira) values
   ('alci',        'Alçı & Alçı Levha',      'Saten, kartonpiyer, alçı levha ve profil sistemleri.',     'assets/products/cat-alci.jpg',       4),
   ('su-yalitim',  'Su Yalıtım',             'Membran, likit yalıtım ve su izolasyon ürünleri.',         'assets/products/cat-suyalitim.jpg',  5),
   ('mantolama',   'Mantolama Sistemleri',   'EPS/XPS levha, yapıştırıcı, sıva ve dış cephe boyası.',    'assets/products/cat-mantolama.jpg',  6),
-  ('boya',        'Boya Malzemeleri',       'İç cephe, dış cephe boyaları, astar, fırça ve rulo.',      '',                                   7),
-  ('insaat',      'İnşaat Malzemeleri',     'Demir, kum, çakıl, kalıp ve genel şantiye malzemeleri.',   '',                                   8),
-  ('hirdavat',    'Hırdavat & El Aletleri', 'El aletleri, vida, dübel, kesici ve bağlantı elemanları.', '',                                   9),
-  ('yapi-kimya',  'Yapı Kimyasalları',      'Yapıştırıcı, derz dolgu, kür ve katkı malzemeleri.',       '',                                  10),
-  ('tesisat',     'Tesisat Ürünleri',       'PPRC, PVC boru, ek parça ve tesisat armatürleri.',         '',                                  11),
-  ('is-guvenlik', 'İş Güvenliği Ürünleri',  'Baret, eldiven, gözlük ve şantiye güvenlik ürünleri.',     '',                                  12)
+  ('boya',        'Boya Malzemeleri',       'İç cephe, dış cephe boyaları, astar, fırça ve rulo.',      'assets/products/cat-boya.jpg',        7),
+  ('insaat',      'İnşaat Malzemeleri',     'Demir, kum, çakıl, kalıp ve genel şantiye malzemeleri.',   'assets/products/cat-insaat.jpg',      8),
+  ('hirdavat',    'Hırdavat & El Aletleri', 'El aletleri, vida, dübel, kesici ve bağlantı elemanları.', 'assets/products/cat-hirdavat.jpg',    9),
+  ('yapi-kimya',  'Yapı Kimyasalları',      'Yapıştırıcı, derz dolgu, kür ve katkı malzemeleri.',       'assets/products/cat-yapikimya.jpg',  10),
+  ('tesisat',     'Tesisat Ürünleri',       'PPRC, PVC boru, ek parça ve tesisat armatürleri.',         'assets/products/cat-tesisat.jpg',    11),
+  ('is-guvenlik', 'İş Güvenliği Ürünleri',  'Baret, eldiven, gözlük ve şantiye güvenlik ürünleri.',     'assets/products/cat-isguvenlik.jpg', 12),
+  ('elektrik',    'Elektrik Malzemeleri',   'Kablo, spiral boru, priz, anahtar, sigorta ve pano malzemeleri.', 'assets/products/cat-elektrik.jpg', 13)
 on conflict (slug) do nothing;
 
 -- ---------- 5) SON ADIM (SQL DIŞINDA) ----------

@@ -134,6 +134,20 @@ document.addEventListener("DOMContentLoaded", () => {
     a.href = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(msg)}`;
     a.innerHTML = `${WA_ICON} WhatsApp'tan Teklif Al`;
     wrap.appendChild(a);
+
+    // Gruptaki ürün listesine (katalog) geçiş. Bölüm kimliği katalog
+    // slug'ıyla aynı; ayrıldığı tek yer aşağıdaki eşleştirme.
+    const KIMLIK_SLUG = { yalitim: "su-yalitim" };
+    const bolum = body.closest("[id]");
+    if (bolum) {
+      const slug = KIMLIK_SLUG[bolum.id] || bolum.id;
+      const kat = document.createElement("a");
+      kat.className = "btn btn-outline";
+      kat.href = "katalog.html?grup=" + encodeURIComponent(slug);
+      kat.textContent = "Ürünleri ve Fiyatları Gör";
+      wrap.appendChild(kat);
+    }
+
     body.appendChild(wrap);
   });
 
@@ -141,7 +155,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
   }, { threshold: 0.12 });
-  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  function revealTara() {
+    document.querySelectorAll(".reveal:not(.in)").forEach((el) => io.observe(el));
+  }
+  revealTara();
+  // Sonradan eklenen kartlar (anasayfa grup kutuları, ürün kartları) da
+  // izlenmeli; yoksa .reveal opacity:0 olduğu için görünmez kalırlar.
+  window.Gorunur = { tazele: revealTara };
 
   // year
   const y = document.getElementById("year");
