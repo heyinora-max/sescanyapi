@@ -9,8 +9,8 @@
    ========================================================= */
 window.AYAR = {
   // --- Supabase (canlı veritabanı) ---
-  supabaseUrl:     "",   // örn: https://abcdefgh.supabase.co
-  supabaseAnonKey: "",   // Project Settings > API > anon public
+  supabaseUrl:     "https://kfcvsalzxrzrvrqploda.supabase.co",
+  supabaseAnonKey: "sb_publishable_bA5CAA9P0xzgiJIY74ryFA_j-3kjpIq",   // publishable key — tarayıcıda durması güvenli, yazma RLS ile kapalı
   gorselKovasi:    "urun-gorselleri",
 
   // --- Panel girişi ---
