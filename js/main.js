@@ -118,6 +118,87 @@ document.addEventListener("DOMContentLoaded", () => {
     [...PARTNERS, ...PARTNERS].forEach((p) => track.appendChild(makeItem(p)));
   }
 
+  /* ---------------------------------------------------------
+     ÜST MENÜ ARAMASI
+     Ziyaretçi hangi sayfadaysa olsun ürün arayabilsin diye.
+     Nav işaretlemesi sekiz sayfada birebir aynı olduğundan
+     buradan kuruluyor; HTML'lerde çoğaltmaya gerek kalmıyor.
+     --------------------------------------------------------- */
+  (function aramaKur() {
+    const cta = document.querySelector(".nav__cta");
+    const sepet = document.querySelector(".nav__sepet");
+    if (!cta || !sepet || document.getElementById("ust-arama")) return;
+
+    const dugme = document.createElement("button");
+    dugme.type = "button";
+    dugme.className = "nav__ara";
+    dugme.id = "ust-arama";
+    dugme.setAttribute("aria-label", "Ürün ara");
+    dugme.setAttribute("aria-expanded", "false");
+    dugme.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+      '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2"/></svg>';
+    cta.insertBefore(dugme, sepet);
+
+    const kat = document.createElement("div");
+    kat.className = "arakat";
+    kat.hidden = true;
+    kat.innerHTML =
+      '<form class="arakat__kutu" role="search">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+        '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2"/></svg>' +
+        '<input type="search" name="ara" placeholder="Ürün, marka ya da malzeme arayın..." ' +
+               'aria-label="Ürün ara" autocomplete="off">' +
+        '<button class="btn btn-primary" type="submit">Ara</button>' +
+        '<button class="arakat__kapat" type="button" aria-label="Kapat">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+          '<path d="M18 6L6 18M6 6l12 12"/></svg>' +
+        "</button>" +
+      "</form>";
+    document.body.appendChild(kat);
+
+    const kutu = kat.querySelector("input");
+
+    function ac() {
+      kat.hidden = false;
+      dugme.setAttribute("aria-expanded", "true");
+      setTimeout(() => kutu.focus(), 40);
+    }
+    function kapat() {
+      kat.hidden = true;
+      dugme.setAttribute("aria-expanded", "false");
+    }
+
+    dugme.addEventListener("click", () => (kat.hidden ? ac() : kapat()));
+    kat.querySelector(".arakat__kapat").addEventListener("click", kapat);
+    kat.addEventListener("mousedown", (e) => { if (e.target === kat) kapat(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !kat.hidden) kapat(); });
+
+    kat.querySelector("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const q = kutu.value.trim();
+      location.href = q ? "katalog.html?ara=" + encodeURIComponent(q) : "katalog.html";
+    });
+
+    // Yan menüde (mobil) da aynı arama dursun
+    const cekmece = document.querySelector(".drawer__panel .link");
+    if (cekmece) {
+      const form = document.createElement("form");
+      form.className = "drawer__ara";
+      form.setAttribute("role", "search");
+      form.innerHTML =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+        '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2"/></svg>' +
+        '<input type="search" name="ara" placeholder="Ürün ara..." aria-label="Ürün ara" autocomplete="off">';
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const q = form.querySelector("input").value.trim();
+        location.href = q ? "katalog.html?ara=" + encodeURIComponent(q) : "katalog.html";
+      });
+      cekmece.parentNode.insertBefore(form, cekmece);
+    }
+  })();
+
   // ürün gruplarına WhatsApp teklif butonu (urunler sayfası)
   const WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.3A10 10 0 1 0 12 2zm5.8 14.2c-.2.7-1.4 1.3-1.9 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.3.5c-.1.2-.3.3-.1.6.1.3.6 1 1.3 1.7.9.8 1.6 1 1.9 1.2.2.1.4.1.5-.1l.6-.7c.2-.2.3-.2.6-.1l1.8.9c.2.1.4.2.5.3.1.2.1.7-.1 1.3z"/></svg>';
   document.querySelectorAll(".prod__body").forEach((body) => {

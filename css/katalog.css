@@ -323,3 +323,7 @@
   font-size: 13.5px; text-align: center; padding: 9px 16px;
 }
 .demo-serit b { font-weight: 800; }
+
+/* Kademeli yükleme düğmesi */
+.daha-fazla { margin-top: 28px; display: flex; justify-content: center; }
+.daha-fazla .btn { min-width: 260px; justify-content: center; }

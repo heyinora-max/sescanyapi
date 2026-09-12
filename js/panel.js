@@ -170,6 +170,9 @@
           '<path d="M12 3l2.6 5.6 6 .8-4.4 4.2 1.1 6.1L12 16.8 6.7 19.7l1.1-6.1L3.4 9.4l6-.8z"/></svg>' +
         "</button>" +
         '<div class="satir__islem">' +
+          '<button class="mini" type="button" data-kopyala="' + kacis(u.id) + '" title="Kopyala" aria-label="Kopyala">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+          "</button>" +
           '<button class="mini" type="button" data-duzenle="' + kacis(u.id) + '" title="Düzenle" aria-label="Düzenle">' +
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>' +
           "</button>" +
@@ -181,7 +184,10 @@
     );
   }
 
-  function grupBlogu(g) {
+  function grupBlogu(g, sira, toplamGrup) {
+    // Taşıma düğmeleri listenin ucundayken kapalı olsun
+    const ilkMi = sira === 0;
+    const sonMu = toplamGrup != null && sira === toplamGrup - 1;
     const urunler = grubunUrunleri(g.id);
     const acik = durum.acik.has(g.id);
     const toplam = durum.urunler.filter((u) => u.grupId === g.id).length;
@@ -221,6 +227,15 @@
               '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>' +
               "Ürün Ekle" +
             "</button>" +
+            '<button class="mini" type="button" data-yukari="' + kacis(g.id) + '" title="Yukarı taşı" aria-label="Yukarı taşı"' + (ilkMi ? " disabled" : "") + ">" +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>' +
+            "</button>" +
+            '<button class="mini" type="button" data-asagi="' + kacis(g.id) + '" title="Aşağı taşı" aria-label="Aşağı taşı"' + (sonMu ? " disabled" : "") + ">" +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>' +
+            "</button>" +
+            '<button class="mini" type="button" data-toplu-fiyat="' + kacis(g.id) + '" title="Toplu fiyat güncelle" aria-label="Toplu fiyat güncelle">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 5L5 19"/><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>' +
+            "</button>" +
             '<button class="mini" type="button" data-grup-duzenle="' + kacis(g.id) + '" title="Grubu düzenle" aria-label="Grubu düzenle">' +
               '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>' +
             "</button>" +
@@ -252,7 +267,7 @@
         return;
       }
     }
-    kap.innerHTML = liste.map(grupBlogu).join("");
+    kap.innerHTML = liste.map((g, i) => grupBlogu(g, i, liste.length)).join("");
   }
 
   /* Tek bir grubu yeniden çizer — tüm listeyi tazelemek yerine, açık
@@ -261,7 +276,8 @@
     const eski = document.querySelector('.grup[data-grup="' + CSS.escape(grupId) + '"]');
     const g = durum.gruplar.find((x) => x.id === grupId);
     if (!eski || !g) { gruplariCiz(); return; }
-    eski.outerHTML = grupBlogu(g);
+    const sira = durum.gruplar.indexOf(g);
+    eski.outerHTML = grupBlogu(g, sira, durum.gruplar.length);
   }
 
   /* ---------------- fiyat: anında kaydetme ----------------
@@ -489,6 +505,383 @@
     document.body.style.overflow = "";
   }
 
+
+  /* Grup sırası hem katalog sol sütununu hem anasayfadaki kutuları
+     belirliyor; müşteri en çok sattığı grubu öne alabilsin diye. */
+  async function grubuTasi(grupId, yon) {
+    const i = durum.gruplar.findIndex((g) => g.id === grupId);
+    const j = i + yon;
+    if (i < 0 || j < 0 || j >= durum.gruplar.length) return;
+    const a = durum.gruplar[i], b = durum.gruplar[j];
+    try {
+      // Sıra numaraları veride seyrek olabilir; komşuyla takas etmek
+      // yerine listedeki konumu yazmak sırayı her zaman tutarlı kılar.
+      await window.Veri.grupKaydet({ ...a, sira: j });
+      await window.Veri.grupKaydet({ ...b, sira: i });
+      await veriTazele();
+    } catch (h) {
+      bildir("Sıra değiştirilemedi: " + h.message, true);
+    }
+  }
+
+  /* =========================================================
+     TOPLU GİRİŞ — Excel/CSV aktarma
+     ---------------------------------------------------------
+     Müşteri yüzlerce ürünü tek tek girmek yerine Excel'de hazırlayıp
+     tek dosyayla aktarabilsin diye. Excel Türkçe kurulumda CSV'yi
+     noktalı virgülle yazar; ayırıcı başlık satırından anlaşılır.
+     ========================================================= */
+
+  const SUTUNLAR = [
+    { alan: "grup",     baslik: "Grup",       ornek: "Boya Malzemeleri" },
+    { alan: "ad",       baslik: "Ürün Adı",   ornek: "Filli Boya Momento 15 L" },
+    { alan: "marka",    baslik: "Marka",      ornek: "Filli Boya" },
+    { alan: "fiyat",    baslik: "Fiyat",      ornek: "2450,50" },
+    { alan: "birim",    baslik: "Birim",      ornek: "kutu" },
+    { alan: "stok",     baslik: "Stok",       ornek: "Stokta" },
+    { alan: "aciklama", baslik: "Açıklama",   ornek: "15 litre. 90-110 m² kapatır." },
+    { alan: "cokSatan", baslik: "Çok Satan",  ornek: "Hayır" },
+  ];
+
+  const STOK_KARSILIK = {
+    "stokta": "stokta", "var": "stokta", "evet": "stokta",
+    "siparis": "siparis", "siparise bagli": "siparis", "siparis uzerine": "siparis",
+    "tukendi": "tukendi", "yok": "tukendi", "bitti": "tukendi",
+  };
+
+  function evetMi(deger) {
+    const t = window.Veri.normalize(deger || "");
+    return t === "evet" || t === "e" || t === "x" || t === "1" || t === "var" || t === "true";
+  }
+
+  /* Tırnak içindeki ayırıcıyı ve çift tırnak kaçışını doğru okur. */
+  function csvCoz(metin, ayirici) {
+    const satirlar = [];
+    let alan = "", satir = [], tirnakta = false;
+    for (let i = 0; i < metin.length; i++) {
+      const c = metin[i];
+      if (tirnakta) {
+        if (c === '"') {
+          if (metin[i + 1] === '"') { alan += '"'; i++; } else tirnakta = false;
+        } else alan += c;
+        continue;
+      }
+      if (c === '"') { tirnakta = true; continue; }
+      if (c === ayirici) { satir.push(alan); alan = ""; continue; }
+      if (c === "\n" || c === "\r") {
+        if (c === "\r" && metin[i + 1] === "\n") i++;
+        satir.push(alan); satirlar.push(satir); alan = ""; satir = [];
+        continue;
+      }
+      alan += c;
+    }
+    if (alan !== "" || satir.length) { satir.push(alan); satirlar.push(satir); }
+    return satirlar.filter((r) => r.some((h) => String(h).trim() !== ""));
+  }
+
+  function ayiriciBul(ilkSatir) {
+    const say = (c) => (ilkSatir.split(c).length - 1);
+    return say(";") > say(",") ? ";" : ",";
+  }
+
+  /* Başlıkları alan adlarına eşler; büyük/küçük ve Türkçe harf farkını yok sayar. */
+  function basliklariEsle(basliklar) {
+    const harita = {};
+    basliklar.forEach((b, i) => {
+      const t = window.Veri.normalize(b);
+      const bulunan = SUTUNLAR.find((s) => window.Veri.normalize(s.baslik) === t || s.alan === t);
+      if (bulunan) harita[bulunan.alan] = i;
+    });
+    return harita;
+  }
+
+  const csv = { satirlar: [], yeniGruplar: [] };
+
+  function sablonMetni() {
+    const ayr = ";";   // Excel'in Türkçe kurulumunda beklediği ayırıcı
+    const bas = SUTUNLAR.map((s) => s.baslik).join(ayr);
+    const ornek1 = SUTUNLAR.map((s) => s.ornek).join(ayr);
+    const ornek2 = ["Tuğla", "Delikli Tuğla 19x19x13", "Derya", "14,75", "adet", "Stokta",
+                    "Palette 240 adet.", "Evet"].join(ayr);
+    // BOM: Excel dosyayı UTF-8 olarak açsın, Türkçe harfler bozulmasın
+    return "﻿" + [bas, ornek1, ornek2].join("\r\n") + "\r\n";
+  }
+
+  function dosyaIndir(ad, icerik, tur) {
+    const bag = document.createElement("a");
+    bag.href = URL.createObjectURL(new Blob([icerik], { type: tur }));
+    bag.download = ad;
+    bag.click();
+    setTimeout(() => URL.revokeObjectURL(bag.href), 1000);
+  }
+
+  function csvHata(mesaj) {
+    $("#csv-onizleme").hidden = false;
+    $("#csv-ozet").textContent = "";
+    $("#csv-tablo").innerHTML = "";
+    const h = $("#csv-hatalar");
+    h.hidden = false;
+    h.innerHTML = "<b>Dosya aktarılamadı</b>" + kacis(mesaj);
+    $("#csv-aktar").disabled = true;
+    $("#csv-durum").textContent = "";
+  }
+
+  async function csvOku(dosya) {
+    const durumEl = $("#csv-durum");
+    durumEl.textContent = "Dosya okunuyor...";
+    let metin = await dosya.text();
+    if (metin.charCodeAt(0) === 0xFEFF) metin = metin.slice(1);
+
+    const ilkSonu = metin.indexOf("\n");
+    const ilkSatir = metin.slice(0, ilkSonu < 0 ? metin.length : ilkSonu);
+    const satirlar = csvCoz(metin, ayiriciBul(ilkSatir));
+    if (satirlar.length < 2) { csvHata("Dosyada başlık satırından sonra veri yok."); return; }
+
+    const harita = basliklariEsle(satirlar[0]);
+    if (harita.ad === undefined) {
+      csvHata("«Ürün Adı» sütunu bulunamadı. Şablonu indirip sütun başlıklarını değiştirmeden kullanın.");
+      return;
+    }
+
+    const gruplarAd = new Map();
+    durum.gruplar.forEach((g) => gruplarAd.set(window.Veri.normalize(g.ad), g));
+
+    const kabul = [], hatalar = [], yeniGrupAdlari = new Set();
+    satirlar.slice(1).forEach((r, i) => {
+      const al = (alan) => (harita[alan] === undefined ? "" : String(r[harita[alan]] || "").trim());
+      const ad = al("ad");
+      if (!ad) { hatalar.push((i + 2) + ". satır: ürün adı boş, atlandı."); return; }
+
+      const grupAd = al("grup");
+      const grup = grupAd ? gruplarAd.get(window.Veri.normalize(grupAd)) : null;
+      if (grupAd && !grup) yeniGrupAdlari.add(grupAd.trim());
+      if (!grupAd && !durum.gruplar.length) {
+        hatalar.push((i + 2) + ". satır: grup boş ve sistemde hiç grup yok.");
+        return;
+      }
+
+      const fiyatHam = al("fiyat");
+      let fiyat = null;
+      if (fiyatHam) {
+        fiyat = window.Veri.fiyatOku(fiyatHam);
+        if (fiyat === null) hatalar.push((i + 2) + ". satır: fiyat okunamadı («" + fiyatHam + "»), boş bırakıldı.");
+      }
+
+      kabul.push({
+        ad: ad,
+        grupAd: grupAd.trim(),
+        marka: al("marka"),
+        fiyat: fiyat,
+        birim: al("birim"),
+        stok: STOK_KARSILIK[window.Veri.normalize(al("stok"))] || "stokta",
+        aciklama: al("aciklama"),
+        cokSatan: evetMi(al("cokSatan")),
+      });
+    });
+
+    csv.satirlar = kabul;
+    csv.yeniGruplar = [...yeniGrupAdlari];
+    csvOnizle(hatalar);
+    durumEl.textContent = "";
+  }
+
+  function csvOnizle(hatalar) {
+    $("#csv-onizleme").hidden = false;
+    $("#csv-aktar").disabled = csv.satirlar.length === 0;
+
+    const fiyatli = csv.satirlar.filter((u) => u.fiyat != null).length;
+    $("#csv-ozet").innerHTML =
+      "<b>" + csv.satirlar.length + " ürün</b> aktarılmaya hazır · " +
+      fiyatli + " tanesinde fiyat var" +
+      (csv.yeniGruplar.length ? " · <b>" + csv.yeniGruplar.length + " yeni grup</b>" : "");
+
+    const h = $("#csv-hatalar");
+    if (hatalar.length) {
+      h.hidden = false;
+      h.innerHTML = "<b>" + hatalar.length + " satırda uyarı var</b>" +
+        hatalar.slice(0, 12).map(kacis).join("<br>") +
+        (hatalar.length > 12 ? "<br>… ve " + (hatalar.length - 12) + " tane daha" : "");
+    } else h.hidden = true;
+
+    const grupAlani = $("#csv-yeni-grup-alan");
+    grupAlani.hidden = csv.yeniGruplar.length === 0;
+    $("#csv-yeni-grup-ad").textContent = csv.yeniGruplar.join(", ");
+
+    const ilk = csv.satirlar.slice(0, 25);
+    $("#csv-tablo").innerHTML =
+      "<table><thead><tr><th>Grup</th><th>Ürün</th><th>Marka</th><th>Fiyat</th><th>Birim</th></tr></thead><tbody>" +
+      ilk.map((u) =>
+        "<tr><td>" + kacis(u.grupAd || "—") + "</td><td>" + kacis(u.ad) + "</td><td>" +
+        kacis(u.marka || "—") + '</td><td class="sayi">' +
+        (u.fiyat == null ? "—" : window.Veri.paraYaz(u.fiyat)) + "</td><td>" +
+        kacis(u.birim || "—") + "</td></tr>"
+      ).join("") +
+      "</tbody></table>" +
+      (csv.satirlar.length > ilk.length
+        ? '<div class="onizleme__devam">… ve ' + (csv.satirlar.length - ilk.length) + " ürün daha</div>"
+        : "");
+  }
+
+  async function csvAktar() {
+    const dugme = $("#csv-aktar");
+    const durumEl = $("#csv-durum");
+    dugme.disabled = true;
+
+    try {
+      // Önce yeni gruplar — ürünler onlara bağlanacak
+      if (csv.yeniGruplar.length && $("#csv-yeni-grup").checked) {
+        for (let i = 0; i < csv.yeniGruplar.length; i++) {
+          const ad = csv.yeniGruplar[i];
+          durumEl.textContent = "Grup oluşturuluyor: " + ad;
+          await window.Veri.grupKaydet({
+            slug: window.Veri.slug(ad), ad: ad, aciklama: "", gorsel: "",
+            sira: durum.gruplar.length + i,
+          });
+        }
+        await veriTazele();
+      }
+
+      const adlaGrup = new Map();
+      durum.gruplar.forEach((g) => adlaGrup.set(window.Veri.normalize(g.ad), g));
+      const varsayilanGrup = durum.gruplar[0];
+
+      let eklenen = 0, atlanan = 0;
+      for (let i = 0; i < csv.satirlar.length; i++) {
+        const u = csv.satirlar[i];
+        const grup = (u.grupAd && adlaGrup.get(window.Veri.normalize(u.grupAd))) || varsayilanGrup;
+        if (!grup) { atlanan++; continue; }
+        durumEl.textContent = (i + 1) + " / " + csv.satirlar.length + " aktarılıyor...";
+        await window.Veri.urunKaydet({
+          grupId: grup.id, ad: u.ad, marka: u.marka, fiyat: u.fiyat, birim: u.birim,
+          stok: u.stok, aciklama: u.aciklama, gorsel: "", cokSatan: u.cokSatan, yayinda: true,
+        });
+        eklenen++;
+        durum.acik.add(grup.id);
+      }
+
+      await veriTazele();
+      excelKipiKapat();
+      bildir(eklenen + " ürün aktarıldı." + (atlanan ? " " + atlanan + " satır atlandı." : ""));
+    } catch (h) {
+      bildir("Aktarma yarıda kaldı: " + h.message, true);
+      await veriTazele();
+    } finally {
+      dugme.disabled = false;
+      durumEl.textContent = "";
+    }
+  }
+
+  function excelKipiAc() {
+    csv.satirlar = []; csv.yeniGruplar = [];
+    $("#csv-onizleme").hidden = true;
+    $("#csv-hatalar").hidden = true;
+    $("#csv-aktar").disabled = true;
+    $("#csv-durum").textContent = "";
+    $("#kip-excel").hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+
+  function excelKipiKapat() {
+    $("#kip-excel").hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  /* Paneldeki tüm ürünleri Excel'de açılabilir CSV olarak indirir. */
+  function csvDisaAktar() {
+    const ayr = ";";
+    const kacisCsv = (d) => {
+      const t = String(d == null ? "" : d);
+      return /[";\n\r]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+    };
+    const grupAdi = new Map(durum.gruplar.map((g) => [g.id, g.ad]));
+    const satirlar = [SUTUNLAR.map((s) => s.baslik).join(ayr)];
+    durum.urunler.forEach((u) => {
+      satirlar.push([
+        grupAdi.get(u.grupId) || "", u.ad, u.marka || "",
+        u.fiyat == null ? "" : window.Veri.paraYaz(u.fiyat),
+        u.birim || "",
+        u.stok === "siparis" ? "Siparişe bağlı" : u.stok === "tukendi" ? "Tükendi" : "Stokta",
+        u.aciklama || "", u.cokSatan ? "Evet" : "Hayır",
+      ].map(kacisCsv).join(ayr));
+    });
+    dosyaIndir("sescanyapi-urunler-" + new Date().toISOString().slice(0, 10) + ".csv",
+               "﻿" + satirlar.join("\r\n") + "\r\n", "text/csv;charset=utf-8");
+    bildir(durum.urunler.length + " ürün Excel dosyasına aktarıldı.");
+  }
+
+  /* =========================================================
+     TOPLU FİYAT GÜNCELLEME
+     ---------------------------------------------------------
+     Yapı malzemesinde zamlar grup grup geliyor; tek tek yazmak
+     yerine gruba yüzde uygulanır. Fiyatı boş ürüne dokunulmaz.
+     ========================================================= */
+
+  function topluFiyatAc(grupId) {
+    const g = durum.gruplar.find((x) => x.id === grupId);
+    if (!g) return;
+    const kapsam = durum.urunler.filter((u) => u.grupId === grupId && u.fiyat != null);
+    $("#f-grup-id").value = grupId;
+    $("#f-oran").value = "";
+    $("#f-onizleme").hidden = true;
+    $("#f-aciklama").innerHTML =
+      "<b>" + kacis(g.ad) + "</b> grubundaki <b>" + kapsam.length + " üründe</b> fiyat güncellenecek." +
+      (kapsam.length ? "" : " Bu grupta fiyatı girilmiş ürün yok.");
+    $("#kip-fiyat").hidden = false;
+    document.body.style.overflow = "hidden";
+    setTimeout(() => $("#f-oran").focus(), 60);
+  }
+
+  function topluFiyatKapat() {
+    $("#kip-fiyat").hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  function yeniFiyat(eski, yon, oran) {
+    const carpan = yon === "indirim" ? 1 - oran / 100 : 1 + oran / 100;
+    return Math.max(0, Math.round(eski * carpan * 100) / 100);
+  }
+
+  function topluFiyatOnizle() {
+    const grupId = $("#f-grup-id").value;
+    const oran = window.Veri.fiyatOku($("#f-oran").value);
+    const kutu = $("#f-onizleme");
+    if (!grupId || oran === null || oran <= 0) { kutu.hidden = true; return; }
+    const yon = $("#f-yon").value;
+    const kapsam = durum.urunler.filter((u) => u.grupId === grupId && u.fiyat != null);
+    if (!kapsam.length) { kutu.hidden = true; return; }
+    const ornek = kapsam[0];
+    kutu.hidden = false;
+    kutu.innerHTML =
+      "Örnek: <b>" + kacis(ornek.ad) + "</b> " + window.Veri.paraYaz(ornek.fiyat) +
+      " → <b>" + window.Veri.paraYaz(yeniFiyat(ornek.fiyat, yon, oran)) + "</b>";
+  }
+
+  async function topluFiyatUygula() {
+    const grupId = $("#f-grup-id").value;
+    const oran = window.Veri.fiyatOku($("#f-oran").value);
+    if (oran === null || oran <= 0) { bildir("Oranı sayı olarak yazın. Örnek: 10", true); return; }
+    const yon = $("#f-yon").value;
+    const kapsam = durum.urunler.filter((u) => u.grupId === grupId && u.fiyat != null);
+    if (!kapsam.length) { topluFiyatKapat(); return; }
+
+    const g = durum.gruplar.find((x) => x.id === grupId);
+    const soru = g.ad + " grubundaki " + kapsam.length + " ürüne %" + oran + " " +
+                 (yon === "indirim" ? "indirim" : "zam") + " uygulanacak. Onaylıyor musunuz?";
+    if (!confirm(soru)) return;
+
+    try {
+      for (const u of kapsam) {
+        await window.Veri.urunKaydet({ ...u, fiyat: yeniFiyat(u.fiyat, yon, oran) });
+      }
+      await veriTazele();
+      topluFiyatKapat();
+      bildir(kapsam.length + " ürünün fiyatı güncellendi.");
+    } catch (h) {
+      bildir("Güncellenemedi: " + h.message, true);
+      await veriTazele();
+    }
+  }
+
   /* ---------------- olaylar ---------------- */
 
   function olaylariBagla() {
@@ -521,6 +914,29 @@
           await veriTazele();
           bildir(g.ad + " silindi.");
         } catch (h) { bildir("Silinemedi: " + h.message, true); }
+        return;
+      }
+
+      const yuk = e.target.closest("[data-yukari]");
+      if (yuk) { grubuTasi(yuk.getAttribute("data-yukari"), -1); return; }
+
+      const asa = e.target.closest("[data-asagi]");
+      if (asa) { grubuTasi(asa.getAttribute("data-asagi"), 1); return; }
+
+      const tf = e.target.closest("[data-toplu-fiyat]");
+      if (tf) { topluFiyatAc(tf.getAttribute("data-toplu-fiyat")); return; }
+
+      const kop = e.target.closest("[data-kopyala]");
+      if (kop) {
+        const u = durum.urunler.find((x) => String(x.id) === kop.getAttribute("data-kopyala"));
+        if (!u) return;
+        // Aynı gruba benzer ürün girerken en sık yapılan iş: kopyasını açıp
+        // sadece ölçüyü/fiyatı değiştirmek. Kayıt değil, dolu form açılır.
+        urunKipiAc({ ...u, id: "", ad: u.ad + " (kopya)" }, u.grupId);
+        $("#urun-kip-baslik").textContent = "Ürünü Kopyala";
+        $("#u-id").value = "";
+        $("#u-kaydet-yeni").hidden = false;
+        setTimeout(() => { const a = $("#u-ad"); a.focus(); a.select(); }, 80);
         return;
       }
 
@@ -593,6 +1009,39 @@
 
     $("#grup-ekle").addEventListener("click", () => grupKipiAc(null));
 
+    // --- Excel / CSV aktarma ---
+    $("#excel-ac").addEventListener("click", excelKipiAc);
+    $("#sablon-indir").addEventListener("click", () => {
+      dosyaIndir("sescanyapi-urun-sablonu.csv", sablonMetni(), "text/csv;charset=utf-8");
+      bildir("Şablon indirildi. Excel'de açıp ürünlerinizi yazın.");
+    });
+
+    const csvAlan = $("#csv-alan");
+    const csvKutu = $("#csv-dosya");
+    csvAlan.addEventListener("click", () => csvKutu.click());
+    csvKutu.addEventListener("change", () => {
+      const d = csvKutu.files[0];
+      csvKutu.value = "";
+      if (d) csvOku(d).catch((h) => csvHata(h.message || "Dosya okunamadı."));
+    });
+    ["dragenter", "dragover"].forEach((o) =>
+      csvAlan.addEventListener(o, (e) => { e.preventDefault(); csvAlan.classList.add("uzerinde"); })
+    );
+    ["dragleave", "drop"].forEach((o) =>
+      csvAlan.addEventListener(o, (e) => { e.preventDefault(); csvAlan.classList.remove("uzerinde"); })
+    );
+    csvAlan.addEventListener("drop", (e) => {
+      const d = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (d) csvOku(d).catch((h) => csvHata(h.message || "Dosya okunamadı."));
+    });
+    $("#csv-aktar").addEventListener("click", csvAktar);
+    $("#csv-disa").addEventListener("click", csvDisaAktar);
+
+    // --- toplu fiyat ---
+    $("#fiyat-form").addEventListener("submit", (e) => { e.preventDefault(); topluFiyatUygula(); });
+    $("#f-oran").addEventListener("input", topluFiyatOnizle);
+    $("#f-yon").addEventListener("change", topluFiyatOnizle);
+
     $("#yedek-al").addEventListener("click", async () => {
       try {
         const veri = await window.Veri.yedekAl();
@@ -647,12 +1096,16 @@
 
     // kip kapatma: perde, çarpı, Vazgeç ve Esc
     document.querySelectorAll("[data-kapat]").forEach((d) =>
-      d.addEventListener("click", () => { urunKipiKapat(); grupKipiKapat(); })
+      d.addEventListener("click", () => {
+        urunKipiKapat(); grupKipiKapat(); excelKipiKapat(); topluFiyatKapat();
+      })
     );
     document.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
       if (!$("#kip-urun").hidden) urunKipiKapat();
       if (!$("#kip-grup").hidden) grupKipiKapat();
+      if (!$("#kip-excel").hidden) excelKipiKapat();
+      if (!$("#kip-fiyat").hidden) topluFiyatKapat();
     });
 
     gorselOlaylari();

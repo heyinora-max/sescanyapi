@@ -28,7 +28,7 @@
     footerGruplar: $("#footer-gruplar"),
   };
 
-  const durum = { grup: "", markalar: new Set(), arama: "", sirala: "yeni" };
+  const durum = { grup: "", markalar: new Set(), arama: "", sirala: "yeni", gosterilen: 24 };
 
   /* ---------- adres çubuğu ---------- */
 
@@ -140,6 +140,43 @@
 
   /* ---------- ürün listesi ---------- */
 
+  /* Katalog büyüdükçe tek seferde yüzlerce kart basmak sayfayı
+     yavaşlatıyor; sayfa başına bu kadar kart basılıp gerisi
+     "Daha fazla göster" ile açılıyor. */
+  const SAYFA_ADEDI = 24;
+  let tumListe = [];
+
+  function dahaFazlaCiz() {
+    const kap = document.getElementById("daha-fazla-kap");
+    if (!kap) return;
+    const kalan = tumListe.length - durum.gosterilen;
+    if (kalan <= 0) { kap.hidden = true; kap.innerHTML = ""; return; }
+    kap.hidden = false;
+    kap.innerHTML =
+      '<button class="btn btn-outline btn-lg" type="button" id="daha-fazla">' +
+        "Daha fazla göster (" + kalan + " ürün)" +
+      "</button>";
+    document.getElementById("daha-fazla").addEventListener("click", () => {
+      durum.gosterilen += SAYFA_ADEDI;
+      kartlariBas();
+    });
+  }
+
+  function kartlariBas() {
+    let bos = "Bu seçime uygun ürün bulunamadı.";
+    if (!durum.grup && !durum.arama && !durum.markalar.size) {
+      bos = "Katalog henüz boş. Ürünler panelden eklendikçe burada görünecek.";
+    }
+    window.Kart.bas(el.liste, tumListe.slice(0, durum.gosterilen), bos);
+    dahaFazlaCiz();
+
+    el.sayac.textContent = !tumListe.length
+      ? ""
+      : durum.gosterilen >= tumListe.length
+        ? tumListe.length + " ürün listeleniyor"
+        : Math.min(durum.gosterilen, tumListe.length) + " / " + tumListe.length + " ürün gösteriliyor";
+  }
+
   async function listeyiCiz() {
     let liste = await window.Veri.urunler({
       grup: durum.grup || null,
@@ -153,13 +190,9 @@
       liste = liste.filter((u) => secili.has(window.Veri.normalize(u.marka)));
     }
 
-    let bos = "Bu seçime uygun ürün bulunamadı.";
-    if (!durum.grup && !durum.arama && !durum.markalar.size) {
-      bos = "Katalog henüz boş. Ürünler panelden eklendikçe burada görünecek.";
-    }
-    window.Kart.bas(el.liste, liste, bos);
-
-    el.sayac.textContent = liste.length ? liste.length + " ürün listeleniyor" : "";
+    tumListe = liste;
+    durum.gosterilen = SAYFA_ADEDI;   // filtre her değiştiğinde baştan
+    kartlariBas();
   }
 
   async function tazele(adresiGuncelle) {

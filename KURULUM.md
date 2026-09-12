@@ -31,6 +31,57 @@ tarayıcı kendiliğinden açılır.
 4. Aynı gruba arka arkaya ürün gireceksiniz diye **Kaydet ve Yeni Ekle** düğmesi var:
    pencere kapanmaz, marka/birim/stok aynı kalır, sadece ad ve fiyatı yazıp devam edersiniz.
 
+### Yüzlerce ürünü tek seferde eklemek (Excel)
+
+Ürünleri tek tek yazmak yerine Excel'de hazırlayıp tek dosyayla aktarabilirsiniz.
+
+1. Panelde **Excel'den Aktar** düğmesine basın.
+2. **Şablonu İndir** deyin — sütunları hazır bir CSV dosyası iner.
+3. Excel'de açıp ürünlerinizi satır satır yazın. Sütun başlıklarını değiştirmeyin.
+
+   | Sütun | Ne yazılır |
+   |---|---|
+   | Grup | Boya Malzemeleri, Tuğla... Yazdığınız grup yoksa aktarma sırasında oluşturulur. |
+   | Ürün Adı | Zorunlu olan tek sütun. Boş satırlar atlanır. |
+   | Marka | Filli Boya, Derya... |
+   | Fiyat | `2450,50` ya da `2.450,50`. Boş bırakılırsa sitede "Fiyat için teklif alın" yazar. |
+   | Birim | adet, torba, palet, m²... |
+   | Stok | Stokta / Siparişe bağlı / Tükendi |
+   | Açıklama | Ürün sayfasında görünen metin. |
+   | Çok Satan | Evet / Hayır |
+
+4. Dosyayı kaydederken **Dosya > Farklı Kaydet > CSV UTF-8 (virgülle ayrılmış)** seçin.
+   Türkçe harfler ancak böyle doğru aktarılır.
+5. Dosyayı panele sürükleyin. Aktarmadan **önce** kaç ürünün geleceğini,
+   hangi satırlarda sorun olduğunu ve oluşacak yeni grupları görürsünüz.
+6. **Aktar** deyin.
+
+> Görseller Excel'den aktarılmaz. Aktardıktan sonra ürünleri düzenleyip
+> fotoğraflarını ekleyebilirsiniz — ya da fotoğraf olmadan da yayında kalabilirler.
+
+**Mevcut Ürünleri İndir** düğmesi ise paneldeki bütün ürünleri Excel'de
+açılabilir bir dosya olarak indirir; fiyat listesi çıkarmak için kullanışlıdır.
+
+### Aynı üründen benzerini eklemek
+
+Ürün satırındaki **kopyala** simgesi, o ürünün bütün bilgileriyle dolu yeni bir
+form açar. Aynı ürünün farklı ölçüsünü girerken sadece adı ve fiyatı
+değiştirmeniz yeter — marka, birim, açıklama hazır gelir.
+
+### Gruba toplu zam / indirim
+
+Grup satırındaki **%** simgesi, o gruptaki bütün ürünlere yüzde uygular.
+
+- Zam ya da indirim seçersiniz, oranı yazarsınız (örn. `10`).
+- Uygulamadan önce örnek bir ürün üzerinde eski ve yeni fiyatı gösterir.
+- **Fiyatı girilmemiş ürünlere dokunulmaz.**
+
+### Grupların sırasını değiştirmek
+
+Grup satırındaki **yukarı / aşağı** okları grubun sırasını değiştirir. Bu sıra
+hem anasayfadaki kutularda hem katalogdaki sol menüde geçerlidir — en çok
+sattığınız grubu en üste alabilirsiniz.
+
 ### Fiyat güncellemek
 
 Grubu açın, listedeki fiyat kutusuna yeni fiyatı yazın. Bu kadar.
@@ -54,6 +105,11 @@ istediğiniz ürünler için kullanışlıdır.
 | En çok satanlara almak | Ürün satırındaki yıldız |
 | Ürünü siteden gizlemek | Ürünü düzenleyin, **Sitede yayında** işaretini kaldırın |
 | Ürün aramak | Üstteki arama kutusu |
+| Excel'den toplu ürün eklemek | **Excel'den Aktar** |
+| Ürün listesini Excel'e çıkarmak | **Excel'den Aktar** > **Mevcut Ürünleri İndir** |
+| Benzer ürün eklemek | Ürün satırındaki kopyala simgesi |
+| Gruba toplu zam yapmak | Grup satırındaki **%** simgesi |
+| Grup sırasını değiştirmek | Grup satırındaki yukarı/aşağı okları |
 | Yedek almak | **Yedek İndir** — bilgisayarınıza JSON dosyası iner |
 
 ---
@@ -119,6 +175,12 @@ Canlıya geçmeden önce demo modda ürün girdiyseniz kaybolmasınlar diye:
 - Görseller yüklenmeden önce tarayıcıda en uzun kenarı 1000px olacak şekilde küçültülüp
   JPEG'e çevrilir; telefondan çekilen büyük fotoğraflar siteyi yavaşlatmaz.
 - Sepet bir ödeme sepeti değil, **teklif sepetidir**: liste WhatsApp mesajına dönüşür.
+- Katalog bir sayfada 24 ürün gösterir, gerisi "Daha fazla göster" ile açılır;
+  yüzlerce ürün eklendiğinde sayfa yavaşlamasın diye.
+- Ürün sayfaları, Google'ın fiyat ve stok durumunu okuyabilmesi için
+  yapısal veri (schema.org Product) üretir.
+- Anasayfadaki grup kutuları ve alt bilgideki liste panelden geliyor:
+  yeni grup açtığınızda kod değiştirmeden sitede görünür.
 
 ### Dosya düzeni
 

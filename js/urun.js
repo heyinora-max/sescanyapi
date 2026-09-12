@@ -94,6 +94,80 @@
       window.Sepet.ekle(u, parseInt(adet.value, 10) || 1);
       window.Kart.bildir(u.ad + " teklif sepetine eklendi.");
     });
+
+    yapisalVeri(u);
+  }
+
+  /* Google'ın ürünü fiyat, stok ve marka bilgisiyle tanıması için
+     yapısal veri. Ürünler panelden girildiği için sayfa açılırken
+     yazılıyor; sabit HTML'e gömmek mümkün değil. */
+  function yapisalVeri(u) {
+    const kok = location.origin + location.pathname.replace(/urun\.html$/, "");
+    const veri = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: u.ad,
+      url: location.href,
+      description: u.aciklama || (u.ad + " — Ses Can Yapı Malzemeleri"),
+      sku: String(u.id),
+    };
+    if (u.marka) veri.brand = { "@type": "Brand", name: u.marka };
+    if (u.gorsel && !/^data:/.test(u.gorsel)) {
+      veri.image = /^https?:/.test(u.gorsel) ? u.gorsel : kok + u.gorsel;
+    }
+    if (u.grupAd) veri.category = u.grupAd;
+    if (u.fiyat != null && u.fiyat !== "") {
+      veri.offers = {
+        "@type": "Offer",
+        price: String(u.fiyat),
+        priceCurrency: "TRY",
+        availability: u.stok === "tukendi"
+          ? "https://schema.org/OutOfStock"
+          : u.stok === "siparis"
+            ? "https://schema.org/BackOrder"
+            : "https://schema.org/InStock",
+        url: location.href,
+        seller: { "@type": "Organization", name: "Ses Can Yapı Malzemeleri" },
+      };
+    }
+
+    const yol = [
+      { "@type": "ListItem", position: 1, name: "Anasayfa", item: kok + "index.html" },
+      { "@type": "ListItem", position: 2, name: "Katalog", item: kok + "katalog.html" },
+    ];
+    if (u.grupAd) {
+      yol.push({ "@type": "ListItem", position: 3, name: u.grupAd,
+                 item: kok + "katalog.html?grup=" + encodeURIComponent(u.grupSlug || "") });
+    }
+    yol.push({ "@type": "ListItem", position: yol.length + 1, name: u.ad, item: location.href });
+
+    const etiket = document.createElement("script");
+    etiket.type = "application/ld+json";
+    etiket.textContent = JSON.stringify([
+      veri,
+      { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: yol },
+    ]);
+    document.head.appendChild(etiket);
+
+    // Paylaşım ve arama sonucu için sayfa üst bilgileri
+    const ac = u.aciklama
+      ? u.aciklama.replace(/\s+/g, " ").slice(0, 155)
+      : u.ad + (u.marka ? " — " + u.marka : "") + ". Ses Can Yapı Malzemeleri, Çerkezköy.";
+    ustBilgi("name", "description", ac);
+    ustBilgi("property", "og:title", u.ad + " — Ses Can Yapı");
+    ustBilgi("property", "og:description", ac);
+    ustBilgi("property", "og:url", location.href);
+    if (veri.image) ustBilgi("property", "og:image", veri.image);
+  }
+
+  function ustBilgi(ozellik, ad, deger) {
+    let et = document.head.querySelector("meta[" + ozellik + '="' + ad + '"]');
+    if (!et) {
+      et = document.createElement("meta");
+      et.setAttribute(ozellik, ad);
+      document.head.appendChild(et);
+    }
+    et.setAttribute("content", deger);
   }
 
   async function benzerleriCiz(u) {

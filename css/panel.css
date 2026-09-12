@@ -285,3 +285,64 @@ h1, h2, h3, h4 { font-family: var(--p-baslik); font-weight: 800; letter-spacing:
 
 .panel-alt { text-align: center; color: var(--p-gri2); font-size: 13px; padding: 34px 0 44px; }
 .panel-alt a { color: var(--p-turuncu); font-weight: 600; }
+
+/* =========================================================
+   TOPLU GİRİŞ — Excel aktarma ve toplu fiyat kipleri
+   ========================================================= */
+.adimlar { list-style: none; counter-reset: adim; display: grid; gap: 18px; }
+.adimlar li {
+  counter-increment: adim; position: relative; padding-left: 38px;
+  font-size: 14px; color: var(--p-gri);
+}
+.adimlar li::before {
+  content: counter(adim); position: absolute; left: 0; top: 0;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--p-turuncu); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font: 700 13px/1 var(--p-baslik);
+}
+.adimlar li b { display: block; color: var(--p-ink); font-size: 14.5px; margin-bottom: 3px; }
+.adimlar li span { display: block; line-height: 1.5; }
+.adimlar li i { font-style: normal; background: #F1F3F7; padding: 1px 5px; border-radius: 4px; }
+.adimlar li .d { margin-top: 10px; }
+
+.dosya-alan {
+  margin-top: 10px; padding: 22px; border: 2px dashed var(--p-cizgi);
+  border-radius: 12px; background: #FAFBFC; text-align: center; cursor: pointer;
+  transition: border-color .15s ease, background .15s ease;
+}
+.dosya-alan:hover, .dosya-alan.uzerinde { border-color: var(--p-turuncu); background: #FFF7F3; }
+.dosya-alan svg { width: 30px; height: 30px; color: var(--p-turuncu); }
+.dosya-alan b { display: block; margin-top: 8px; font-size: 14px; color: var(--p-ink); }
+.dosya-alan span { display: block; font-size: 12.5px; color: var(--p-gri); }
+
+.onizleme { margin-top: 20px; border-top: 1px solid var(--p-cizgi); padding-top: 18px; }
+.onizleme__ozet {
+  background: #F0F7F2; border: 1px solid #CBE5D4; color: #14532D;
+  border-radius: 10px; padding: 12px 14px; font-size: 13.5px; line-height: 1.55;
+}
+.onizleme__ozet b { font-weight: 700; }
+.onizleme__hata {
+  margin-top: 10px; background: #FEF2F2; border: 1px solid #FBD5D5; color: #991B1B;
+  border-radius: 10px; padding: 12px 14px; font-size: 13px; line-height: 1.6;
+  max-height: 150px; overflow-y: auto;
+}
+.onizleme__hata b { display: block; margin-bottom: 4px; }
+.onizleme__tablo { margin-top: 12px; max-height: 240px; overflow: auto; border: 1px solid var(--p-cizgi); border-radius: 10px; }
+.onizleme__tablo table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.onizleme__tablo th, .onizleme__tablo td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #F0F2F6; white-space: nowrap; }
+.onizleme__tablo th { background: #F7F8FA; font-weight: 700; position: sticky; top: 0; }
+.onizleme__tablo tr:last-child td { border-bottom: 0; }
+.onizleme__tablo td.sayi { text-align: right; font-variant-numeric: tabular-nums; }
+
+.kip__durum { margin-left: auto; font-size: 13px; color: var(--p-gri); }
+.kip__aciklama { font-size: 14px; color: var(--p-gri); margin-bottom: 16px; line-height: 1.55; }
+
+@media (max-width: 600px) {
+  .adimlar li { padding-left: 32px; }
+  .onizleme__tablo { max-height: 190px; }
+}
+
+.onizleme__devam { padding: 8px 10px; font-size: 12.5px; color: var(--p-gri); }
+
+.mini[disabled] { opacity: .28; cursor: default; pointer-events: none; }

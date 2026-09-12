@@ -588,3 +588,53 @@ h1, h2, h3, h4 { letter-spacing: -.03em; }
 }
 .btn-wa:hover { background: #1DA851; transform: translateY(-2px); box-shadow: 0 10px 22px rgba(37,211,102,.30); }
 .btn-wa svg { width: 18px; height: 18px; }
+
+/* =========================================================
+   ÜST MENÜ ARAMASI
+   ========================================================= */
+.nav__ara {
+  width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink);
+  cursor: pointer; transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.nav__ara:hover { border-color: var(--orange); color: var(--orange); background: #FFF7F3; }
+.nav__ara svg { width: 19px; height: 19px; }
+
+.arakat {
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(16,18,23,.55); backdrop-filter: blur(3px);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 96px 16px 16px;
+}
+.arakat__kutu {
+  width: min(680px, 100%); background: #fff; border-radius: 14px;
+  box-shadow: 0 30px 70px rgba(16,18,23,.3);
+  display: flex; align-items: center; gap: 10px; padding: 10px 10px 10px 16px;
+}
+.arakat__kutu > svg { width: 20px; height: 20px; color: var(--muted); flex: none; }
+.arakat__kutu input {
+  flex: 1 1 auto; min-width: 0; border: 0; outline: 0; background: transparent;
+  font: 400 16px/1.4 var(--font-body); color: var(--ink); padding: 10px 0;
+}
+.arakat__kutu input::placeholder { color: var(--muted); }
+.arakat__kapat {
+  width: 38px; height: 38px; flex: none; border: 0; background: transparent;
+  color: var(--muted); cursor: pointer; border-radius: 9px;
+}
+.arakat__kapat:hover { background: var(--bg-soft); color: var(--ink); }
+.arakat__kapat svg { width: 18px; height: 18px; }
+
+.drawer__ara {
+  display: flex; align-items: center; gap: 9px; margin: 4px 0 14px;
+  padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px; background: #fff;
+}
+.drawer__ara svg { width: 18px; height: 18px; color: var(--muted); flex: none; }
+.drawer__ara input {
+  flex: 1 1 auto; min-width: 0; border: 0; outline: 0; background: transparent;
+  font: 400 15px/1.4 var(--font-body); color: var(--ink);
+}
+
+@media (max-width: 900px) {
+  .nav__ara { display: none; }          /* mobilde arama yan menüde */
+  .arakat { padding-top: 76px; }
+}
